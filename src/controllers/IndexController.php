@@ -6,6 +6,7 @@ namespace src\controllers;
 
 use src\app\http\Request;
 use src\app\http\Response;
+use src\classes\database\DatabaseConnection;
 
 class IndexController
 {    
@@ -14,8 +15,11 @@ class IndexController
     // ********************************************************************************************
 
     public function index(Request $request, Response $response)
-    {                 
-        $response->json(["api_running" => true], 200);       
+    {          
+        if($db = DatabaseConnection::getConnection()) 
+        {
+            $response->json(["api_running" => true, "version" => '1.0'], 200);
+        }     
     }    
 
     // ********************************************************************************************
