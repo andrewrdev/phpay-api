@@ -15,8 +15,8 @@ class IndexController
     // ********************************************************************************************
 
     public function index(Request $request, Response $response)
-    {          
-        if($db = DatabaseConnection::getConnection()) 
+    {                  
+        if(DatabaseConnection::getConnection()) 
         {
             $response->json(["api_running" => true, "version" => '1.0'], 200);
         }     
