@@ -6,28 +6,31 @@ namespace src\classes\database;
 
 use PDO;
 use PDOException;
+use src\classes\util\ApplicationProperties;
 
 class DatabaseConnection
 {  
     public static function getConnection()
     {        
-        try {
-            $properties = parse_ini_file(__DIR__ . "/../../application.properties");
+        try {          
     
-            $host = $properties['DATABASE_HOST'];
-            $dbname = $properties['DATABASE_NAME'];
-            $username = $properties['DATABASE_USER'];
-            $password = $properties['DATABASE_PASSWORD'];
+            $host = ApplicationProperties::get('DATABASE_HOST');
+            $dbname = ApplicationProperties::get('DATABASE_NAME');
+            $username = ApplicationProperties::get('DATABASE_USER');
+            $password = ApplicationProperties::get('DATABASE_PASSWORD');
     
             $dsn = "mysql:host=" . $host . ";dbname=" . $dbname . ";charset=utf8";
             $conn = new PDO($dsn, $username, $password);
             $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
             return $conn;
+
         } catch (PDOException $e) {
+
             http_response_code(500);
             echo json_encode(["error" => $e->getMessage()]);
             exit;
+
         }
     }
 }
