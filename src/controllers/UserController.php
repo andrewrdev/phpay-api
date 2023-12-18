@@ -59,6 +59,7 @@ class UserController
         $user->setEmail($request->getParam('email'));
         $user->setPassword($request->getParam('password'));
         $user->setType($request->getParam('type'));
+        $user->setId((int) $request->pathParam('id'));
 
         UserRepository::update($user);            
     }

@@ -17,22 +17,32 @@ class UserRepository implements Repository
         $conn = DatabaseConnection::getConnection();
 
         try {
+
             $query = "SELECT * FROM users";
             $stmt = $conn->prepare($query);
             $stmt->execute();
 
             if ($stmt->rowCount() > 0) {
+
                 http_response_code(200);
                 return $stmt->fetchAll(PDO::FETCH_ASSOC);
+
             } else {
+
                 http_response_code(404);
-                return ['message' => 'Users not found'];
+                echo json_encode(['message' => 'Users not found']);
+
             }
+
         } catch (Exception $e) {
+
             http_response_code(500);
-            return ['message' => $e->getMessage()];
+            echo json_encode(['message' => $e->getMessage()]);
+
         } finally {
+
             $conn = null;
+
         }
     }
 
@@ -41,22 +51,32 @@ class UserRepository implements Repository
         $conn = DatabaseConnection::getConnection();
 
         try {
+
             $query = "SELECT * FROM users WHERE id = ? LIMIT 1";
             $stmt = $conn->prepare($query);
             $stmt->execute(array($id));
 
             if ($stmt->rowCount() > 0) {
+
                 http_response_code(200);
                 return $stmt->fetchAll(PDO::FETCH_ASSOC);
+
             } else {
+
                 http_response_code(404);
-                return ['message' => 'User not found'];
+                echo json_encode(['message' => 'User not found']);
+
             }
+
         } catch (Exception $e) {
+
             http_response_code(500);
-            return ['message' => $e->getMessage()];
+            echo json_encode(['message' => $e->getMessage()]);
+
         } finally {
+
             $conn = null;
+
         }
     }
 
@@ -65,6 +85,7 @@ class UserRepository implements Repository
         $conn = DatabaseConnection::getConnection();
 
         try {
+            
             $conn->beginTransaction();
             $query = "INSERT INTO users (`full_name`,`cpf`,`cnpj`,`email`,`password`,`type`) 
                       VALUES (?, ?, ?, ?, ?, ?)";
@@ -82,12 +103,17 @@ class UserRepository implements Repository
             $conn->commit();
             http_response_code(201);
             echo json_encode(['message' => 'User created successfully']);
+
         } catch (Exception $e) {
+
             $conn->rollBack();
             http_response_code(500);
             echo json_encode(['message' => $e->getMessage()]);
+
         } finally {
+
             $conn = null;
+
         }
     }
 
@@ -96,6 +122,7 @@ class UserRepository implements Repository
         $conn = DatabaseConnection::getConnection();
 
         try {
+
             $conn->beginTransaction();
             $query = "UPDATE users SET `full_name` = ?, 
                                        `cpf` = ?, 
@@ -112,19 +139,25 @@ class UserRepository implements Repository
                 $user->getCnpj(),
                 $user->getEmail(),
                 $user->getPassword(),
-                $user->getType()
+                $user->getType(),
+                $user->getId()
             ));
 
             $conn->commit();
 
             http_response_code(200);
             echo json_encode(['message' => 'User updated successfully']);
+
         } catch (Exception $e) {
+
             $conn->rollBack();
             http_response_code(500);
             echo json_encode(['message' => $e->getMessage()]);
+
         } finally {
+
             $conn = null;
+
         }
     }
 
@@ -133,6 +166,7 @@ class UserRepository implements Repository
         $conn = DatabaseConnection::getConnection();
 
         try {
+
             $conn->beginTransaction();
             $query = "DELETE FROM users WHERE id = ?";
             $stmt = $conn->prepare($query);
@@ -141,12 +175,17 @@ class UserRepository implements Repository
 
             http_response_code(204);
             echo json_encode(['message' => 'User deleted successfully']);
+
         } catch (Exception $e) {
+
             $conn->rollBack();
             http_response_code(500);
             echo json_encode(['message' => $e->getMessage()]);
+
         } finally {
+
             $conn = null;
+
         }
     }
 }
