@@ -4,13 +4,13 @@ namespace src\interfaces\repository;
 
 interface Repository
 {    
-    public function selectAll();
+    public static function selectAll();
     
-    public function selectById(int $id);   
+    public static function selectById(int $id);   
     
-    public function insert(object $model);
+    public static function insert(object $model);
 
-    public function update(object $model);
+    public static function update(object $model);
 
-    public function deleteById(int $id);    
+    public static function deleteById(int $id);    
 }

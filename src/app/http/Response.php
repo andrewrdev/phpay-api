@@ -47,9 +47,8 @@ class Response
     // ********************************************************************************************
     // ********************************************************************************************
 
-    public function json(array $data, int $responseCode = 200) : void
-    {
-        http_response_code($responseCode);
+    public function json(array $data) : void
+    {        
         echo json_encode($data);
     }
 
