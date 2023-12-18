@@ -6,7 +6,7 @@ namespace src\controllers;
 
 use src\app\http\Request;
 use src\app\http\Response;
-use src\classes\database\DatabaseConnection;
+use src\models\UserModel;
 use src\repositories\UserRepository;
 
 class UserController
@@ -36,9 +36,15 @@ class UserController
 
     public function insert(Request $request, Response $response)
     {
-        $id = (int) $request->getParam('id');
-        $users = UserRepository::selectById($id);
-        $response->json($users);
+        $user = new UserModel();
+        $user->setFullName($request->getParam('full_name'));
+        $user->setCpf($request->getParam('cpf'));
+        $user->setCnpj($request->getParam('cnpj'));
+        $user->setEmail($request->getParam('email'));
+        $user->setPassword($request->getParam('password'));
+        $user->setType($request->getParam('type'));
+
+        UserRepository::insert($user);        
     }
     
     // ********************************************************************************************
@@ -46,9 +52,15 @@ class UserController
 
     public function update(Request $request, Response $response)
     {
-        $id = (int) $request->getParam('id');
-        $users = UserRepository::selectById($id);
-        $response->json($users);
+        $user = new UserModel();
+        $user->setFullName($request->getParam('full_name'));
+        $user->setCpf($request->getParam('cpf'));
+        $user->setCnpj($request->getParam('cnpj'));
+        $user->setEmail($request->getParam('email'));
+        $user->setPassword($request->getParam('password'));
+        $user->setType($request->getParam('type'));
+
+        UserRepository::update($user);            
     }
     
     // ********************************************************************************************
@@ -57,8 +69,7 @@ class UserController
     public function delete(Request $request, Response $response)
     {
         $id = (int) $request->PathParam('id');
-        $users = UserRepository::deleteById($id);
-        $response->json($users);
+        UserRepository::deleteById($id);        
     }
     
     // ********************************************************************************************

@@ -1,4 +1,6 @@
-<?php 
+<?php
+
+declare(strict_types=1);
 
 namespace src\repositories;
 
@@ -6,65 +8,128 @@ use Exception;
 use src\classes\database\DatabaseConnection;
 use src\interfaces\repository\Repository;
 use PDO;
-use src\models\UserModel;
 
 class UserRepository implements Repository
 {
 
-public static function selectAll()
-{
-    try {
+    public static function selectAll()
+    {
         $conn = DatabaseConnection::getConnection();
-        $query = "SELECT * FROM users";
-        $stmt = $conn->prepare($query);
-        $stmt->execute();
 
-        if ($stmt->rowCount() > 0) {
-            http_response_code(200);
-            $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            return $users;
-        } else {
-            http_response_code(404);
-            return ['message' => 'Users not found'];
+        try {
+            $query = "SELECT * FROM users";
+            $stmt = $conn->prepare($query);
+            $stmt->execute();
+
+            if ($stmt->rowCount() > 0) {
+                http_response_code(200);
+                return $stmt->fetchAll(PDO::FETCH_ASSOC);
+            } else {
+                http_response_code(404);
+                return ['message' => 'Users not found'];
+            }
+        } catch (Exception $e) {
+            http_response_code(500);
+            return ['message' => $e->getMessage()];
+        } finally {
+            $conn = null;
         }
-    } catch (Exception $e) {
-        http_response_code(500);
-        return ['message' => $e->getMessage()];
     }
-}
-    
-public static function selectById(int $id)
-{
-    try {
+
+    public static function selectById(int $id)
+    {
         $conn = DatabaseConnection::getConnection();
-        $query = "SELECT * FROM users WHERE id = ?";
-        $stmt = $conn->prepare($query);
-        $stmt->execute(array($id));
 
-        if ($stmt->rowCount() > 0) {
-            http_response_code(200);
-            $user = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            return $user;
-        } else {
-            http_response_code(404);
-            return ['message' => 'User not found'];
+        try {
+            $query = "SELECT * FROM users WHERE id = ? LIMIT 1";
+            $stmt = $conn->prepare($query);
+            $stmt->execute(array($id));
+
+            if ($stmt->rowCount() > 0) {
+                http_response_code(200);
+                return $stmt->fetchAll(PDO::FETCH_ASSOC);
+            } else {
+                http_response_code(404);
+                return ['message' => 'User not found'];
+            }
+        } catch (Exception $e) {
+            http_response_code(500);
+            return ['message' => $e->getMessage()];
+        } finally {
+            $conn = null;
         }
-    } catch (Exception $e) {
-        http_response_code(500);
-        return ['message' => $e->getMessage()];
     }
-}
-    
+
     public static function insert(object $user)
-    {        
+    {
+        $conn = DatabaseConnection::getConnection();
+
+        try {
+            $conn->beginTransaction();
+            $query = "INSERT INTO users (`full_name`,`cpf`,`cnpj`,`email`,`password`,`type`) 
+                      VALUES (?, ?, ?, ?, ?, ?)";
+
+            $stmt = $conn->prepare($query);
+            $stmt->execute(array(
+                $user->getFullName(),
+                $user->getCpf(),
+                $user->getCnpj(),
+                $user->getEmail(),
+                $user->getPassword(),
+                $user->getType()
+            ));
+
+            $conn->commit();
+            http_response_code(201);
+            echo json_encode(['message' => 'User created successfully']);
+        } catch (Exception $e) {
+            $conn->rollBack();
+            http_response_code(500);
+            echo json_encode(['message' => $e->getMessage()]);
+        } finally {
+            $conn = null;
+        }
     }
 
     public static function update(object $user)
-    {        
+    {
+        $conn = DatabaseConnection::getConnection();
+
+        try {
+            $conn->beginTransaction();
+            $query = "UPDATE users SET `full_name` = ?, 
+                                       `cpf` = ?, 
+                                       `cnpj` = ?, 
+                                       `email` = ?, 
+                                       `password` = ?, 
+                                       `type` = ? 
+                                       WHERE id = ?";
+
+            $stmt = $conn->prepare($query);
+            $stmt->execute(array(
+                $user->getFullName(),
+                $user->getCpf(),
+                $user->getCnpj(),
+                $user->getEmail(),
+                $user->getPassword(),
+                $user->getType()
+            ));
+
+            $conn->commit();
+
+            http_response_code(200);
+            echo json_encode(['message' => 'User updated successfully']);
+        } catch (Exception $e) {
+            $conn->rollBack();
+            http_response_code(500);
+            echo json_encode(['message' => $e->getMessage()]);
+        } finally {
+            $conn = null;
+        }
     }
 
     public static function deleteById(int $id)
-    {      
+    {
         $conn = DatabaseConnection::getConnection();
 
         try {
@@ -73,14 +138,15 @@ public static function selectById(int $id)
             $stmt = $conn->prepare($query);
             $stmt->execute(array($id));
             $conn->commit();
-            
-            http_response_code(200);
-            return ['message' => 'User deleted successfully'];
 
+            http_response_code(204);
+            echo json_encode(['message' => 'User deleted successfully']);
         } catch (Exception $e) {
             $conn->rollBack();
             http_response_code(500);
-            return ['message' => $e->getMessage()];
-        }  
-    } 
+            echo json_encode(['message' => $e->getMessage()]);
+        } finally {
+            $conn = null;
+        }
+    }
 }

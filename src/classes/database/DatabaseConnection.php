@@ -8,45 +8,26 @@ use PDO;
 use PDOException;
 
 class DatabaseConnection
-{
-    private static $host;
-    private static $dbname;
-    private static $username;
-    private static $password;
-    private static $pdo;
-
-    // ********************************************************************************************
-    // ********************************************************************************************
-
-    private static function connect()
-    {
-        $properties = parse_ini_file(__DIR__ . "/../../application.properties");
-
-        self::$host = $properties['DATABASE_HOST'];
-        self::$dbname = $properties['DATABASE_NAME'];
-        self::$username = $properties['DATABASE_USER'];
-        self::$password = $properties['DATABASE_PASSWORD'];
-
-        $dsn = "mysql:host=" . self::$host . ";dbname=" . self::$dbname . ";charset=utf8";
-
+{  
+    public static function getConnection()
+    {        
         try {
-            self::$pdo = new PDO($dsn, self::$username, self::$password);
-            self::$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $properties = parse_ini_file(__DIR__ . "/../../application.properties");
+    
+            $host = $properties['DATABASE_HOST'];
+            $dbname = $properties['DATABASE_NAME'];
+            $username = $properties['DATABASE_USER'];
+            $password = $properties['DATABASE_PASSWORD'];
+    
+            $dsn = "mysql:host=" . $host . ";dbname=" . $dbname . ";charset=utf8";
+            $conn = new PDO($dsn, $username, $password);
+            $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+            return $conn;
         } catch (PDOException $e) {
             http_response_code(500);
-            echo json_encode(['error' => 'Database Connection Failed!']);
+            echo json_encode(["error" => $e->getMessage()]);
+            exit;
         }
     }
-
-    // ********************************************************************************************
-    // ********************************************************************************************
-
-    public static function getConnection()
-    {
-        self::connect();
-        return self::$pdo;
-    }
-
-    // ********************************************************************************************
-    // ********************************************************************************************
 }
