@@ -72,10 +72,36 @@ class Router
             }
 
             if ($routeEqualsUrl === count($requestURI)) {
+                if($_SERVER["REQUEST_METHOD"] === "GET") {
+                    $json_data = file_get_contents("php://input");
+                    $data = json_decode($json_data, true) ?? [];
+                    $request->setParamsFromRequest($data);
+                } 
+
+                if($_SERVER["REQUEST_METHOD"] === "POST") {
+                    $json_data = file_get_contents("php://input");
+                    $data = json_decode($json_data, true) ?? [];
+                    $request->setParamsFromRequest($data);
+                } 
+                
+                if($_SERVER["REQUEST_METHOD"] === "PUT") {
+                    $json_data = file_get_contents("php://input");
+                    $data = json_decode($json_data, true) ?? [];
+                    $request->setParamsFromRequest($data);
+                } 
+                
+                if ($_SERVER["REQUEST_METHOD"] === "DELETE") {
+                    $json_data = file_get_contents("php://input");
+                    $data = json_decode($json_data, true) ?? [];
+                    $request->setParamsFromRequest($data);
+                }
+                
                 self::runController($controller, $request, $response);
             } else {
                 http_response_code(404);
-                require_once __DIR__ . '/../../views/error/404.php';
+                echo json_encode([
+                    "message" => "Route not found",
+                ]);                
             }            
         }        
     }
@@ -85,7 +111,7 @@ class Router
 
     public static function get(string $route, string $controller): void
     {
-        if (mb_strtoupper($_SERVER["REQUEST_METHOD"]) === "GET") {
+        if (mb_strtoupper($_SERVER["REQUEST_METHOD"]) === "GET") {            
             self::initRouting($route, $controller);
         }
     }
@@ -93,30 +119,30 @@ class Router
     // ********************************************************************************************
     // ********************************************************************************************
 
-    public function post(string $route, string $controller): void
+    public static function post(string $route, string $controller): void
     {
         if (mb_strtoupper($_SERVER["REQUEST_METHOD"]) === "POST") {
-            $this->initRouting($route, $controller);
+            self::initRouting($route, $controller);
         }
     }
 
     // ********************************************************************************************
     // ********************************************************************************************
 
-    public function put(string $route, string $controller): void
+    public static function put(string $route, string $controller): void
     {
         if (mb_strtoupper($_SERVER["REQUEST_METHOD"]) === "PUT") {
-            $this->initRouting($route, $controller);
+            self::initRouting($route, $controller);
         }
     }
 
     // ********************************************************************************************
     // ********************************************************************************************
 
-    public function delete(string $route, string $controller): void
+    public static function delete(string $route, string $controller): void
     {
         if (mb_strtoupper($_SERVER["REQUEST_METHOD"]) === "DELETE") {
-            $this->initRouting($route, $controller);
+            self::initRouting($route, $controller);
         }
     }
 

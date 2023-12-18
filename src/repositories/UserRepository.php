@@ -6,11 +6,12 @@ use Exception;
 use src\classes\database\DatabaseConnection;
 use src\interfaces\repository\Repository;
 use PDO;
+use src\models\UserModel;
 
 class UserRepository implements Repository
 {
 
-public static function selectAll(): array
+public static function selectAll()
 {
     try {
         $conn = DatabaseConnection::getConnection();
@@ -20,7 +21,8 @@ public static function selectAll(): array
 
         if ($stmt->rowCount() > 0) {
             http_response_code(200);
-            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            return $users;
         } else {
             http_response_code(404);
             return ['message' => 'Users not found'];
@@ -41,7 +43,8 @@ public static function selectById(int $id)
 
         if ($stmt->rowCount() > 0) {
             http_response_code(200);
-            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $user = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            return $user;
         } else {
             http_response_code(404);
             return ['message' => 'User not found'];
@@ -52,15 +55,32 @@ public static function selectById(int $id)
     }
 }
     
-    public static function insert(object $model)
+    public static function insert(object $user)
     {        
     }
 
-    public static function update(object $model)
+    public static function update(object $user)
     {        
     }
 
     public static function deleteById(int $id)
-    {        
+    {      
+        $conn = DatabaseConnection::getConnection();
+
+        try {
+            $conn->beginTransaction();
+            $query = "DELETE FROM users WHERE id = ?";
+            $stmt = $conn->prepare($query);
+            $stmt->execute(array($id));
+            $conn->commit();
+            
+            http_response_code(200);
+            return ['message' => 'User deleted successfully'];
+
+        } catch (Exception $e) {
+            $conn->rollBack();
+            http_response_code(500);
+            return ['message' => $e->getMessage()];
+        }  
     } 
 }

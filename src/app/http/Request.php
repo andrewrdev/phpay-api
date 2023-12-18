@@ -7,11 +7,12 @@ namespace src\app\http;
 class Request
 {
     private array $urlParams;
+    private array $requestParams;
 
     // ********************************************************************************************
     // ********************************************************************************************
 
-    public function getParam(string $param = ''): string
+    public function PathParam(string $param = ''): string
     {
         return $this->urlParams[$param];
     }
@@ -22,6 +23,22 @@ class Request
     public function setParamsFromURL(array $urlParams): void
     {
         $this->urlParams = $urlParams;
+    }
+
+    // ********************************************************************************************
+    // ********************************************************************************************
+
+    public function setParamsFromRequest(array $requestParams): void
+    {
+        $this->requestParams = $requestParams;
+    }
+
+    // ********************************************************************************************
+    // ********************************************************************************************
+
+    public function getParam(string $param = '')
+    {
+        return $this->requestParams[$param];
     }
 
     // ********************************************************************************************
