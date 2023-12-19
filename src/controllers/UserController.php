@@ -28,7 +28,10 @@ class UserController
     {
         $id = (int) $request->pathParam('id');
         $users = UserRepository::selectById($id);
-        $response->json($users);
+
+        if (!empty($users)) {
+            $response->json($users);            
+        }
     }
 
     // ********************************************************************************************
