@@ -98,12 +98,11 @@ class Router
                 
                 self::runController($controller, $request, $response);
             } else {
-                http_response_code(404);
-                echo json_encode([
-                    "message" => "Route not found",
-                ]);                
+                http_response_code(404); 
+                echo json_encode(["message" => "Route not found"]);
+                exit;                              
             }            
-        }        
+        }       
     }
 
     // ********************************************************************************************

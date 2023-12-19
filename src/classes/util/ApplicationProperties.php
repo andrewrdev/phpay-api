@@ -15,7 +15,6 @@ class ApplicationProperties
             http_response_code(500);
             echo json_encode(["error" => "Application property not found"]);
             exit;
-        }
-        
+        }        
     }
 }
