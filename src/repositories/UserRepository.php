@@ -64,7 +64,6 @@ class UserRepository implements Repository
             if ($stmt->rowCount() > 0) {                
                 return $stmt->fetch(PDO::FETCH_ASSOC);
             }
-
         } catch (Exception $e) {
             http_response_code(500);
             echo json_encode(['message' => $e->getMessage()]);
@@ -92,11 +91,12 @@ class UserRepository implements Repository
                 $user->getType()
             ));
 
-            $conn->commit();  
+            $conn->commit(); 
+            return $conn; 
         } catch (Exception $e) {
             $conn->rollBack();
             http_response_code(500);
-            echo json_encode(['message' => $e->getMessage()]);
+            echo json_encode(['message' => $e->getMessage()]);            
         } finally {
             $conn = null;
         }
@@ -128,10 +128,11 @@ class UserRepository implements Repository
             ));
 
             $conn->commit(); 
+            return $conn;
         } catch (Exception $e) {
             $conn->rollBack();
             http_response_code(500);
-            echo json_encode(['message' => $e->getMessage()]);
+            echo json_encode(['message' => $e->getMessage()]);            
         } finally {
             $conn = null;
         }
@@ -147,6 +148,7 @@ class UserRepository implements Repository
             $stmt = $conn->prepare($query);
             $stmt->execute(array($id));
             $conn->commit(); 
+            return $conn;
         } catch (Exception $e) {
             $conn->rollBack();
             http_response_code(500);

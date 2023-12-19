@@ -7,7 +7,7 @@ namespace src\controllers;
 use src\app\http\Request;
 use src\app\http\Response;
 use src\models\UserModel;
-use src\repositories\UserRepository;
+use src\services\UserService;
 
 class UserController
 {
@@ -17,8 +17,11 @@ class UserController
 
     public function selectAll(Request $request, Response $response)
     {  
-        $users = UserRepository::selectAll();
-        $response->json($users);
+        $users = UserService::selectAll();
+
+        if(!empty($users)) {
+            $response->json($users);           
+        }        
     }
 
     // ********************************************************************************************
@@ -27,11 +30,10 @@ class UserController
     public function selectOne(Request $request, Response $response)
     {
         $id = (int) $request->pathParam('id');
-        $users = UserRepository::selectById($id);
-
-        if (!empty($users)) {
-            $response->json($users);            
-        }
+        $users = UserService::selectById($id);        
+        if(!empty($users)) {
+            $response->json($users);           
+        }  
     }
 
     // ********************************************************************************************
@@ -47,7 +49,7 @@ class UserController
         $user->setPassword($request->getParam('password'));
         $user->setType($request->getParam('type'));
 
-        UserRepository::insert($user);        
+        UserService::insert($user);      
     }
     
     // ********************************************************************************************
@@ -64,7 +66,7 @@ class UserController
         $user->setType($request->getParam('type'));
         $user->setId((int) $request->pathParam('id'));
 
-        UserRepository::update($user);            
+        UserService::update($user);        
     }
     
     // ********************************************************************************************
@@ -73,7 +75,7 @@ class UserController
     public function delete(Request $request, Response $response)
     {
         $id = (int) $request->PathParam('id');
-        UserRepository::deleteById($id);        
+        UserService::deleteById($id);      
     }
     
     // ********************************************************************************************
