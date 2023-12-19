@@ -8,7 +8,7 @@ use src\app\http\Request;
 use src\app\http\Response;
 use src\classes\database\DatabaseConnection;
 
-class IndexController
+class HomeController
 {    
 
     // ********************************************************************************************
@@ -18,7 +18,7 @@ class IndexController
     {                  
         if(DatabaseConnection::getConnection()) 
         {
-            $response->json(["api_running" => true, "version" => '1.0'], 200);
+            $response->json(["api_running" => true, "version" => '1.0']);
         }     
     }    
 
