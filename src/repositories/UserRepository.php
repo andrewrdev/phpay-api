@@ -72,6 +72,46 @@ class UserRepository implements Repository
         }
     }
 
+    public static function selectByCpf(string $cpf)
+    {
+        $conn = null;        
+        try {
+            $conn = DatabaseConnection::getConnection();
+            $query = "SELECT * FROM users WHERE cpf = ? LIMIT 1";
+            $stmt = $conn->prepare($query);
+            $stmt->execute(array($cpf));
+
+            if ($stmt->rowCount() > 0) {                
+                return $stmt->fetch(PDO::FETCH_ASSOC);
+            }
+        } catch (Exception $e) {
+            http_response_code(500);
+            echo json_encode(['message' => $e->getMessage()]);
+        } finally {
+            $conn = null;
+        }
+    }
+
+    public static function selectByCnpj(string $cnpj)
+    {
+        $conn = null;        
+        try {
+            $conn = DatabaseConnection::getConnection();
+            $query = "SELECT * FROM users WHERE cnpj = ? LIMIT 1";
+            $stmt = $conn->prepare($query);
+            $stmt->execute(array($cnpj));
+
+            if ($stmt->rowCount() > 0) {                
+                return $stmt->fetch(PDO::FETCH_ASSOC);
+            }
+        } catch (Exception $e) {
+            http_response_code(500);
+            echo json_encode(['message' => $e->getMessage()]);
+        } finally {
+            $conn = null;
+        }
+    }
+
     public static function insert(object $user)
     {
         $conn = null; 
@@ -94,7 +134,9 @@ class UserRepository implements Repository
             $conn->commit(); 
             return $conn; 
         } catch (Exception $e) {
-            $conn->rollBack();
+            if($conn) {
+                $conn->rollBack();
+            }
             http_response_code(500);
             echo json_encode(['message' => $e->getMessage()]);            
         } finally {
@@ -130,11 +172,13 @@ class UserRepository implements Repository
             $conn->commit(); 
             return $conn;
         } catch (Exception $e) {
-            $conn->rollBack();
+            if($conn) {
+                $conn->rollBack();
+            }            
             http_response_code(500);
             echo json_encode(['message' => $e->getMessage()]);            
-        } finally {
-            $conn = null;
+        } finally {            
+            $conn = null;            
         }
     }
 
@@ -150,7 +194,9 @@ class UserRepository implements Repository
             $conn->commit(); 
             return $conn;
         } catch (Exception $e) {
-            $conn->rollBack();
+            if($conn) {
+                $conn->rollBack();
+            }
             http_response_code(500);
             echo json_encode(['message' => $e->getMessage()]);
         } finally {

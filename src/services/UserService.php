@@ -39,7 +39,19 @@ class UserService
     } 
 
     public static function insert(object $user) 
-    {        
+    {   
+        if(self::emailExists($user->getEmail())) {
+            http_response_code(409);
+            echo json_encode(['message' => 'User email already exists']);
+            return;
+        }
+
+        if(self::cpfExists($user->getCpf())) {
+            http_response_code(409);
+            echo json_encode(['message' => 'User cpf already exists']);
+            return;
+        }
+
         if(UserRepository::insert($user)) {
             http_response_code(201);
             echo json_encode(['message' => 'User created successfully']);
@@ -70,6 +82,20 @@ class UserService
             echo json_encode(['message' => 'User could not be deleted']);
         }
     }
+
+    public static function emailExists(string $email) : bool
+    {    
+        $user = UserRepository::selectByEmail($email);
+        return (!empty($user)) ? true : false;
+    }
+
+    public static function cpfExists(string $cpf) : bool
+    {
+        $user = UserRepository::selectByCpf($cpf);
+        return (!empty($user)) ? true : false;
+    }
+
+    
 
 
 
