@@ -43,13 +43,19 @@ class UserService
         if(self::emailExists($user->getEmail())) {
             http_response_code(409);
             echo json_encode(['message' => 'User email already exists']);
-            return;
+            exit;
         }
 
         if(self::cpfExists($user->getCpf())) {
             http_response_code(409);
             echo json_encode(['message' => 'User cpf already exists']);
-            return;
+            exit;
+        }
+
+        if(self::cnpjExists($user->getCnpj())) {
+            http_response_code(409);
+            echo json_encode(['message' => 'User cnpj already exists']);
+            exit;
         }
 
         if(UserRepository::insert($user)) {
@@ -73,7 +79,13 @@ class UserService
     }
 
     public static function deleteById(int $id) 
-    {        
+    {   
+        if(!self::IdExists($id)) {
+            http_response_code(404);
+            echo json_encode(['message' => 'User not found']);
+            exit;
+        }     
+
         if(UserRepository::deleteById($id)) {
             http_response_code(200);
             echo json_encode(['message' => 'User deleted successfully']);
@@ -81,6 +93,12 @@ class UserService
             http_response_code(500);
             echo json_encode(['message' => 'User could not be deleted']);
         }
+    }
+
+    public static function IdExists(int $id) : bool
+    {
+        $user = UserRepository::selectById($id);
+        return (!empty($user)) ? true : false;
     }
 
     public static function emailExists(string $email) : bool
@@ -95,9 +113,9 @@ class UserService
         return (!empty($user)) ? true : false;
     }
 
-    
-
-
-
-
+    public static function cnpjExists(string $cnpj) : bool
+    {
+        $user = UserRepository::selectByCnpj($cnpj);
+        return (!empty($user)) ? true : false;
+    }
 }
