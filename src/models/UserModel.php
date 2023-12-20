@@ -9,74 +9,79 @@ class UserModel
 
     private int $id;
     private string $fullName;
-    private string $cpf;
-    private string $cnpj;
+    private string $cpf_cnpj;
     private string $email;
     private string $password;
     private float $balance;
     private string $type;
-    
-    public function getId(): int {
+
+    public function getId(): int
+    {
         return $this->id;
     }
-    
-    public function setId(int $id): void {
+
+    public function setId(int $id): void
+    {
         $this->id = $id;
     }
-   
-    public function getFullName(): string {
+
+    public function getFullName(): string
+    {
         return $this->fullName;
     }
-    
-    public function setFullName(string $fullName): void {
+
+    public function setFullName(string $fullName): void
+    {
         $this->fullName = $fullName;
     }
-    
-    public function getCpf(): string {
-        return $this->cpf;
+
+    public function getCpfCnpj(): string
+    {
+        return $this->cpf_cnpj;
     }
-    
-    public function setCpf(string $cpf): void {
-        $this->cpf = $cpf;        
+
+    public function setCpfCnpj(string $cpf_cnpj)
+    {
+        $this->cpf_cnpj = $cpf_cnpj;
     }
-    
-    public function getCnpj(): string {
-        return $this->cnpj;
-    }
-    
-    public function setCnpj(string $cnpj): void {
-        $this->cnpj = $cnpj;        
-    }
-    
-    public function getEmail(): string {
+
+    public function getEmail(): string
+    {
         return $this->email;
     }
-    
-    public function setEmail(string $email): void {
-        $this->email = $email;        
+
+    public function setEmail(string $email): void
+    {
+        $this->email = $email;
     }
-    
-    public function getPassword(): string {
+
+    public function getPassword(): string
+    {
         return $this->password;
     }
-    
-    public function setPassword(string $password): void {
-        $this->password = password_hash($password, PASSWORD_DEFAULT);        
+
+    public function setPassword(string $password): void
+    {
+        $this->password = password_hash($password, PASSWORD_DEFAULT);
     }
-    
-    public function getBalance(): float {
+
+    public function getBalance(): float
+    {
         return $this->balance;
     }
-    
-    public function setBalance(float $balance): void {
-        $this->balance = $balance;        
+
+    public function setBalance(float $balance): void
+    {
+        $this->balance = $balance;
     }
-    
-    public function getType(): string {
+
+    public function getType(): string
+    {
         return $this->type;
     }
-    
-    public function setType(string $type): void {
-        $this->type = $type;        
+
+    public function setType(string $type): void
+    {
+        $this->type = $type;
     }
 }
