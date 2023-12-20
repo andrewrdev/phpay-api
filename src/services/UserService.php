@@ -72,19 +72,7 @@ class UserService
             http_response_code(404);
             echo json_encode(['message' => 'User not found', 'statusCode' => 404]);
             exit;
-        }
-
-        if (self::emailExists($user->getEmail())) {
-            http_response_code(409);
-            echo json_encode(['message' => 'User email already exists', 'statusCode' => 409]);
-            exit;
-        }
-
-        if (self::cpfCnpjExists($user->getCpfCnpj())) {
-            http_response_code(409);
-            echo json_encode(['message' => 'User cpf_cnpj already exists', 'statusCode' => 409]);
-            exit;
-        } 
+        }       
 
         if (UserRepository::update($user)) {
             http_response_code(201);
