@@ -43,8 +43,7 @@ class UserController
     {
         $user = new UserModel();
         $user->setFullName($request->getParam('full_name'));
-        $user->setCpf($request->getParam('cpf'));
-        $user->setCnpj($request->getParam('cnpj'));
+        $user->setCpfCnpj($request->getParam('cpf_cnpj'));        
         $user->setEmail($request->getParam('email'));
         $user->setPassword($request->getParam('password'));
         $user->setType($request->getParam('type'));
@@ -59,8 +58,7 @@ class UserController
     {
         $user = new UserModel();
         $user->setFullName($request->getParam('full_name'));
-        $user->setCpf($request->getParam('cpf'));
-        $user->setCnpj($request->getParam('cnpj'));
+        $user->setCpfCnpj($request->getParam('cpf_cnpj')); 
         $user->setEmail($request->getParam('email'));
         $user->setPassword($request->getParam('password'));
         $user->setType($request->getParam('type'));

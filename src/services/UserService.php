@@ -48,17 +48,11 @@ class UserService
             exit;
         }
 
-        if (self::cpfExists($user->getCpf())) {
+        if (self::cpfCnpjExists($user->getCpfCnpj())) {
             http_response_code(409);
-            echo json_encode(['message' => 'User cpf already exists', 'statusCode' => 409]);
+            echo json_encode(['message' => 'User cpf_cnpj already exists', 'statusCode' => 409]);
             exit;
-        }
-
-        if (self::cnpjExists($user->getCnpj())) {
-            http_response_code(409);
-            echo json_encode(['message' => 'User cnpj already exists', 'statusCode' => 409]);
-            exit;
-        }
+        }        
 
         if (UserRepository::insert($user)) {
             http_response_code(201);
@@ -79,6 +73,18 @@ class UserService
             echo json_encode(['message' => 'User not found', 'statusCode' => 404]);
             exit;
         }
+
+        if (self::emailExists($user->getEmail())) {
+            http_response_code(409);
+            echo json_encode(['message' => 'User email already exists', 'statusCode' => 409]);
+            exit;
+        }
+
+        if (self::cpfCnpjExists($user->getCpfCnpj())) {
+            http_response_code(409);
+            echo json_encode(['message' => 'User cpf_cnpj already exists', 'statusCode' => 409]);
+            exit;
+        } 
 
         if (UserRepository::update($user)) {
             http_response_code(201);
@@ -130,21 +136,12 @@ class UserService
     // ********************************************************************************************
     // ********************************************************************************************
 
-    private static function cpfExists(string $cpf): bool
+    private static function cpfCnpjExists(string $cpf_cnpj): bool
     {
-        $user = UserRepository::selectByCpf($cpf);
+        $user = UserRepository::selectByCpfCnpj($cpf_cnpj);
         return (!empty($user)) ? true : false;
     }
 
     // ********************************************************************************************
-    // ********************************************************************************************
-
-    private static function cnpjExists(string $cnpj): bool
-    {
-        $user = UserRepository::selectByCnpj($cnpj);
-        return (!empty($user)) ? true : false;
-    }
-
-    // ********************************************************************************************
-    // ********************************************************************************************
+    // ********************************************************************************************    
 }
