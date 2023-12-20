@@ -19,7 +19,7 @@ class UserService
             return $users;
         } else {
             http_response_code(404);
-            echo json_encode(['message' => 'Users not found']);
+            echo json_encode(['message' => 'Users not found', 'statusCode' => 404]);
         }
     }
 
@@ -33,7 +33,7 @@ class UserService
             return $user;
         } else {
             http_response_code(404);
-            echo json_encode(['message' => 'User not found']);
+            echo json_encode(['message' => 'User not found', 'statusCode' => 404]);
         }
     }
 
@@ -44,28 +44,28 @@ class UserService
     {
         if (self::emailExists($user->getEmail())) {
             http_response_code(409);
-            echo json_encode(['message' => 'User email already exists']);
+            echo json_encode(['message' => 'User email already exists', 'statusCode' => 409]);
             exit;
         }
 
         if (self::cpfExists($user->getCpf())) {
             http_response_code(409);
-            echo json_encode(['message' => 'User cpf already exists']);
+            echo json_encode(['message' => 'User cpf already exists', 'statusCode' => 409]);
             exit;
         }
 
         if (self::cnpjExists($user->getCnpj())) {
             http_response_code(409);
-            echo json_encode(['message' => 'User cnpj already exists']);
+            echo json_encode(['message' => 'User cnpj already exists', 'statusCode' => 409]);
             exit;
         }
 
         if (UserRepository::insert($user)) {
             http_response_code(201);
-            echo json_encode(['message' => 'User created successfully']);
+            echo json_encode(['message' => 'User created successfully', 'statusCode' => 201]);
         } else {
             http_response_code(500);
-            echo json_encode(['message' => 'User could not be created']);
+            echo json_encode(['message' => 'User could not be created', 'statusCode' => 500]);
         }
     }
 
@@ -76,16 +76,16 @@ class UserService
     {
         if (!self::IdExists($user->getId())) {
             http_response_code(404);
-            echo json_encode(['message' => 'User not found']);
+            echo json_encode(['message' => 'User not found', 'statusCode' => 404]);
             exit;
         }
 
         if (UserRepository::update($user)) {
             http_response_code(201);
-            echo json_encode(['message' => 'User updated successfully']);
+            echo json_encode(['message' => 'User updated successfully', 'statusCode' => 201]);
         } else {
             http_response_code(500);
-            echo json_encode(['message' => 'User could not be updated']);
+            echo json_encode(['message' => 'User could not be updated', 'statusCode' => 500]);
         }
     }
 
@@ -96,23 +96,23 @@ class UserService
     {
         if (!self::IdExists($id)) {
             http_response_code(404);
-            echo json_encode(['message' => 'User not found']);
-            exit;
+            echo json_encode(['message' => 'User not found', 'statusCode' => 404]);
+            exit;            
         }
 
         if (UserRepository::deleteById($id)) {
             http_response_code(200);
-            echo json_encode(['message' => 'User deleted successfully']);
+            echo json_encode(['message' => 'User deleted successfully', 'statusCode' => 200]);
         } else {
             http_response_code(500);
-            echo json_encode(['message' => 'User could not be deleted']);
+            echo json_encode(['message' => 'User could not be deleted', 'statusCode' => 500]);
         }
     }
 
     // ********************************************************************************************
     // ********************************************************************************************
 
-    public static function IdExists(int $id): bool
+    private static function IdExists(int $id): bool
     {
         $user = UserRepository::selectById($id);
         return (!empty($user)) ? true : false;
@@ -121,7 +121,7 @@ class UserService
     // ********************************************************************************************
     // ********************************************************************************************
 
-    public static function emailExists(string $email): bool
+    private static function emailExists(string $email): bool
     {
         $user = UserRepository::selectByEmail($email);
         return (!empty($user)) ? true : false;
@@ -130,7 +130,7 @@ class UserService
     // ********************************************************************************************
     // ********************************************************************************************
 
-    public static function cpfExists(string $cpf): bool
+    private static function cpfExists(string $cpf): bool
     {
         $user = UserRepository::selectByCpf($cpf);
         return (!empty($user)) ? true : false;
@@ -139,7 +139,7 @@ class UserService
     // ********************************************************************************************
     // ********************************************************************************************
 
-    public static function cnpjExists(string $cnpj): bool
+    private static function cnpjExists(string $cnpj): bool
     {
         $user = UserRepository::selectByCnpj($cnpj);
         return (!empty($user)) ? true : false;
