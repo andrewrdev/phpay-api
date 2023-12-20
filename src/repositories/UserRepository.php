@@ -82,14 +82,14 @@ class UserRepository implements Repository
     // ********************************************************************************************
     // ********************************************************************************************
 
-    public static function selectByCpf(string $cpf)
+    public static function selectByCpfCnpj(string $cpf_cnpj)
     {
         $conn = null;        
         try {
             $conn = DatabaseConnection::getConnection();
-            $query = "SELECT * FROM users WHERE cpf = ? LIMIT 1";
+            $query = "SELECT * FROM users WHERE cpf_cnpj = ? LIMIT 1";
             $stmt = $conn->prepare($query);
-            $stmt->execute(array($cpf));
+            $stmt->execute(array($cpf_cnpj));
 
             if ($stmt->rowCount() > 0) {                
                 return $stmt->fetch(PDO::FETCH_ASSOC);
@@ -103,30 +103,7 @@ class UserRepository implements Repository
     }
 
     // ********************************************************************************************
-    // ********************************************************************************************
-
-    public static function selectByCnpj(string $cnpj)
-    {
-        $conn = null;        
-        try {
-            $conn = DatabaseConnection::getConnection();
-            $query = "SELECT * FROM users WHERE cnpj = ? LIMIT 1";
-            $stmt = $conn->prepare($query);
-            $stmt->execute(array($cnpj));
-
-            if ($stmt->rowCount() > 0) {                
-                return $stmt->fetch(PDO::FETCH_ASSOC);
-            }
-        } catch (Exception $e) {
-            http_response_code(500);
-            echo json_encode(['message' => $e->getMessage()]);
-        } finally {
-            $conn = null;
-        }
-    }
-
-    // ********************************************************************************************
-    // ********************************************************************************************
+    // ********************************************************************************************   
 
     public static function insert(object $user)
     {
@@ -134,14 +111,13 @@ class UserRepository implements Repository
         try {
             $conn = DatabaseConnection::getConnection();            
             $conn->beginTransaction();
-            $query = "INSERT INTO users (`full_name`,`cpf`,`cnpj`,`email`,`password`,`type`) 
-                      VALUES (?, ?, ?, ?, ?, ?)";
+            $query = "INSERT INTO users (`full_name`,`cpf_cnpj`, `email`,`password`,`type`) 
+                      VALUES (?, ?, ?, ?, ?)";
 
             $stmt = $conn->prepare($query);
             $stmt->execute(array(
                 $user->getFullName(),
-                $user->getCpf(),
-                $user->getCnpj(),
+                $user->getCpfCnpj(),                
                 $user->getEmail(),
                 $user->getPassword(),
                 $user->getType()
@@ -170,8 +146,7 @@ class UserRepository implements Repository
             $conn = DatabaseConnection::getConnection();
             $conn->beginTransaction();
             $query = "UPDATE users SET `full_name` = ?, 
-                                       `cpf` = ?, 
-                                       `cnpj` = ?, 
+                                       `cpf_cnpj` = ?,                                         
                                        `email` = ?, 
                                        `password` = ?, 
                                        `type` = ? 
@@ -180,8 +155,7 @@ class UserRepository implements Repository
             $stmt = $conn->prepare($query);
             $stmt->execute(array(
                 $user->getFullName(),
-                $user->getCpf(),
-                $user->getCnpj(),
+                $user->getCpfCnpj(),                
                 $user->getEmail(),
                 $user->getPassword(),
                 $user->getType(),
