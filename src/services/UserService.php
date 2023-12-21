@@ -106,6 +106,26 @@ class UserService
     // ********************************************************************************************
     // ********************************************************************************************
 
+    public static function deposit(int $userId, float $amount)
+    {
+        if (!self::IdExists($userId)) {
+            http_response_code(404);
+            echo json_encode(['message' => 'Error depositing - User not found', 'statusCode' => 404]);
+            exit;            
+        }
+
+        if (UserRepository::updateBalance($userId, $amount)) {
+            http_response_code(200);
+            echo json_encode(['message' => 'Deposit successfully', 'statusCode' => 200]);
+        } else {
+            http_response_code(500);
+            echo json_encode(['message' => 'Deposit could not be done', 'statusCode' => 500]);
+        }
+    }
+
+    // ********************************************************************************************
+    // ********************************************************************************************
+
     private static function IdExists(int $id): bool
     {
         $user = UserRepository::selectById($id);
