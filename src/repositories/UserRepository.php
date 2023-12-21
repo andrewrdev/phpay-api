@@ -145,20 +145,12 @@ class UserRepository implements Repository
         try {
             $conn = DatabaseConnection::getConnection();
             $conn->beginTransaction();
-            $query = "UPDATE users SET `full_name` = ?, 
-                                       `cpf_cnpj` = ?,                                         
-                                       `email` = ?, 
-                                       `password` = ?, 
-                                       `type` = ? 
-                                       WHERE id = ?";
+            $query = "UPDATE users SET `full_name` = ?, `password` = ? WHERE id = ?";
 
             $stmt = $conn->prepare($query);
             $stmt->execute(array(
-                $user->getFullName(),
-                $user->getCpfCnpj(),                
-                $user->getEmail(),
-                $user->getPassword(),
-                $user->getType(),
+                $user->getFullName(),                
+                $user->getPassword(),                
                 $user->getId()
             ));
 

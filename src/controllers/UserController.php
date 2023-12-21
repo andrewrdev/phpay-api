@@ -57,11 +57,8 @@ class UserController
     public function update(Request $request, Response $response)
     {
         $user = new UserModel();
-        $user->setFullName($request->getParam('full_name'));
-        $user->setCpfCnpj($request->getParam('cpf_cnpj')); 
-        $user->setEmail($request->getParam('email'));
-        $user->setPassword($request->getParam('password'));
-        $user->setType($request->getParam('type'));
+        $user->setFullName($request->getParam('full_name'));        
+        $user->setPassword($request->getParam('password'));        
         $user->setId((int) $request->pathParam('id'));
 
         UserService::update($user);        

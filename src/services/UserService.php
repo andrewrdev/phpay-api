@@ -70,7 +70,7 @@ class UserService
     {
         if (!self::IdExists($user->getId())) {
             http_response_code(404);
-            echo json_encode(['message' => 'User not found', 'statusCode' => 404]);
+            echo json_encode(['message' => 'Error updating user - User not found', 'statusCode' => 404]);
             exit;
         }       
 
@@ -90,7 +90,7 @@ class UserService
     {
         if (!self::IdExists($id)) {
             http_response_code(404);
-            echo json_encode(['message' => 'User not found', 'statusCode' => 404]);
+            echo json_encode(['message' => 'Error deleting user - User not found', 'statusCode' => 404]);
             exit;            
         }
 
