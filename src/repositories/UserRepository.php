@@ -194,4 +194,29 @@ class UserRepository implements Repository
 
     // ********************************************************************************************
     // ********************************************************************************************
+
+    public static function updateBalance(int $userId, float $amount)
+    {
+        $conn = null;
+        try {
+            $conn = DatabaseConnection::getConnection();
+            $conn->beginTransaction();
+            $query = "UPDATE users SET balance += ? WHERE id = ?";
+            $stmt = $conn->prepare($query);
+            $stmt->execute(array($amount, $userId));
+            $conn->commit(); 
+            return $conn;
+        } catch (Exception $e) {
+            if($conn) {
+                $conn->rollBack();
+            }
+            http_response_code(500);
+            echo json_encode(['message' => $e->getMessage()]);
+        } finally {
+            $conn = null;
+        }
+    }
+
+    // ********************************************************************************************
+    // ********************************************************************************************
 }
