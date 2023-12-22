@@ -36,6 +36,31 @@ class UserRepository implements Repository
     // ********************************************************************************************
     // ********************************************************************************************
 
+    public static function selectBalance(int $userId)
+    {
+        $conn = null;
+        try {
+            $conn = DatabaseConnection::getConnection();
+            $conn->beginTransaction();
+            $query = "SELECT balance FROM users WHERE id = ? LIMIT 1";
+            $stmt = $conn->prepare($query);
+            $stmt->execute(array($userId));
+            $conn->commit(); 
+            return $conn;
+        } catch (Exception $e) {
+            if($conn) {
+                $conn->rollBack();
+            }
+            http_response_code(500);
+            echo json_encode(['message' => $e->getMessage()]);
+        } finally {
+            $conn = null;
+        }
+    }
+
+    // ********************************************************************************************
+    // ********************************************************************************************
+
     public static function selectById(int $id)
     {
         $conn = null;
@@ -218,5 +243,5 @@ class UserRepository implements Repository
     }
 
     // ********************************************************************************************
-    // ********************************************************************************************
+    // ********************************************************************************************    
 }
