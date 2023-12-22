@@ -19,4 +19,8 @@ Router::post('  /api/v1/users/deposit', 'UserController@deposit');
 // ********************************************************************************************
 // ********************************************************************************************
 
-Router::get('  /api/v1/transactions',  'TransactionController@selectAll');
+Router::get('   /api/v1/transactions',       'TransactionController@selectAll');
+Router::get('   /api/v1/transactions/{id}',  'TransactionController@selectOne');
+Router::post('  /api/v1/transactions',       'TransactionController@insert');
+Router::put('   /api/v1/transactions/{id}',  'TransactionController@update');
+Router::delete('/api/v1/transactions/{id}',  'TransactionController@delete');

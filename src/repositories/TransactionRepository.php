@@ -18,7 +18,20 @@ class TransactionRepository implements Repository
         $conn = null;
         try {
             $conn = DatabaseConnection::getConnection();
-            $query = "SELECT * FROM transactions";
+            $query = "SELECT 
+                 transactions.id,
+                 transactions.amount, 
+                 sender.full_name AS sender_name,
+                 sender.cpf_cnpj AS sender_cpf_cnpj,                 
+                 receiver.full_name AS receiver_name,
+                 receiver.cpf_cnpj AS receiver_cpf_cnpj,                 
+                 transactions.created_at
+                FROM transactions
+                INNER JOIN users AS sender 
+                ON transactions.sender_id = sender.id
+                INNER JOIN users AS receiver 
+                ON transactions.receiver_id = receiver.id";
+
             $stmt = $conn->prepare($query);
             $stmt->execute();
 
@@ -41,7 +54,19 @@ class TransactionRepository implements Repository
         $conn = null;
         try {
             $conn = DatabaseConnection::getConnection();            
-            $query = "SELECT * FROM transactions WHERE id = ? LIMIT 1";
+            $query = "SELECT 
+                 transactions.id,
+                 transactions.amount, 
+                 sender.full_name AS sender_name,
+                 sender.cpf_cnpj AS sender_cpf_cnpj,                 
+                 receiver.full_name AS receiver_name,
+                 receiver.cpf_cnpj AS receiver_cpf_cnpj,                 
+                 transactions.created_at
+                FROM transactions
+                INNER JOIN users AS sender 
+                ON transactions.sender_id = sender.id
+                INNER JOIN users AS receiver 
+                ON transactions.receiver_id = receiver.id WHERE transactions.id = ? LIMIT 1";
             $stmt = $conn->prepare($query);
             $stmt->execute(array($id));
 
@@ -81,7 +106,14 @@ class TransactionRepository implements Repository
                 $transaction->getAmount(),
                 $transaction->getReceiverId()
             ));
-            
+
+            $query = "UPDATE users SET balance = balance - ? WHERE id = ?";
+            $stmt = $conn->prepare($query);
+            $stmt->execute(array(
+                $transaction->getAmount(),
+                $transaction->getSenderId()
+            ));
+
             $conn->commit(); 
 
             return $conn; 
