@@ -201,7 +201,7 @@ class UserRepository implements Repository
         try {
             $conn = DatabaseConnection::getConnection();
             $conn->beginTransaction();
-            $query = "UPDATE users SET balance += ? WHERE id = ?";
+            $query = "UPDATE users SET balance = balance + ? WHERE id = ?";
             $stmt = $conn->prepare($query);
             $stmt->execute(array($amount, $userId));
             $conn->commit(); 
