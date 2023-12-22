@@ -33,6 +33,7 @@ class TransactionService
         } else {
             http_response_code(404);
             echo json_encode(['message' => 'Transaction not found', 'statusCode' => 404]);
+            exit;
         }
     }
 
@@ -47,6 +48,7 @@ class TransactionService
         } else {
             http_response_code(500);
             echo json_encode(['message' => 'Transaction could not be created', 'statusCode' => 500]);
+            exit;
         }
     }
 
@@ -77,6 +79,7 @@ class TransactionService
         if (!self::IdExists($id)) {
             http_response_code(404);
             echo json_encode(['message' => 'Transaction not found', 'statusCode' => 404]);
+            exit;
         }
 
         if (TransactionRepository::deleteById($id)) {
