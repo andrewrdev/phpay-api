@@ -126,6 +126,26 @@ class UserService
     // ********************************************************************************************
     // ********************************************************************************************
 
+    public static function getBalance(int $userId)
+    {
+        if (!self::IdExists($userId)) {
+            http_response_code(404);
+            echo json_encode(['message' => 'Error getting balance - User not found', 'statusCode' => 404]);
+            exit;            
+        }
+
+        if (UserRepository::selectBalance($userId)) {
+            http_response_code(200);
+            echo json_encode(['message' => 'Balance successfully retrieved', 'statusCode' => 200]);
+        } else {
+            http_response_code(500);
+            echo json_encode(['message' => 'Balance could not be retrieved', 'statusCode' => 500]);
+        }
+    }
+
+    // ********************************************************************************************
+    // ********************************************************************************************
+
     private static function IdExists(int $id): bool
     {
         $user = UserRepository::selectById($id);
