@@ -42,7 +42,37 @@ class TransactionService
 
     public static function insert(object $transaction)
     {
-        if (TransactionRepository::insert($transaction)) {
+        if (!UserService::IdExists($transaction->getSenderId()) && !UserService::IdExists($transaction->getReceiverId())) {
+            http_response_code(409);
+            echo json_encode(['message' => 'Sender or receiver id not found', 'statusCode' => 409]);
+            exit;            
+        }  
+
+        if ($transaction->getSenderId() === $transaction->getReceiverId()) {
+            http_response_code(409);
+            echo json_encode(['message' => 'Sender and receiver cannot be the same', 'statusCode' => 409]);
+            exit;                      
+        }
+
+        $senderBalance = UserService::getBalance($transaction->getSenderId());
+
+        if($senderBalance['balance'] < $transaction->getAmount())
+        {
+            http_response_code(409);
+            echo json_encode(['message' => 'Sender does not have enough balance', 'statusCode' => 409]);
+            exit;
+        }
+
+        $senderType = UserService::getType($transaction->getSenderId());
+
+        if($senderType['type'] === 'retailer')
+        {
+            http_response_code(409);
+            echo json_encode(['message' => 'Retailer cannot send money', 'statusCode' => 409]);
+            exit;
+        }
+
+        if (TransactionRepository::insert($transaction)) {            
             http_response_code(201);
             echo json_encode(['message' => 'Transaction created successfully', 'statusCode' => 201]);
         } else {
