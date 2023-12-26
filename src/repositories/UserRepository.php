@@ -41,16 +41,14 @@ class UserRepository implements Repository
         $conn = null;
         try {
             $conn = DatabaseConnection::getConnection();
-            $conn->beginTransaction();
             $query = "SELECT balance FROM users WHERE id = ? LIMIT 1";
             $stmt = $conn->prepare($query);
             $stmt->execute(array($userId));
-            $conn->commit(); 
-            return $conn;
-        } catch (Exception $e) {
-            if($conn) {
-                $conn->rollBack();
+
+            if ($stmt->rowCount() > 0) {                
+                return $stmt->fetch(PDO::FETCH_ASSOC);
             }
+        } catch (Exception $e) {
             http_response_code(500);
             echo json_encode(['message' => $e->getMessage()]);
         } finally {
