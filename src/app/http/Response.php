@@ -9,11 +9,13 @@ class Response
     // ********************************************************************************************
     // ********************************************************************************************
 
-    public function json(array $data = []): void
+    public static function json(array $data = []): void
     {
-        header('Content-Type: application/json');
         if (!empty($data)) {
+            header('Content-Type: application/json');
+            http_response_code($data['statusCode'] ?? 200);
             echo json_encode($data);
+            exit;
         }
     }
 

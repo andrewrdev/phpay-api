@@ -18,7 +18,7 @@ class HomeController
     {                  
         if(DatabaseConnection::getConnection()) 
         {
-            $response->json(["api_running" => true, "version" => '1.0']);
+            Response::json(["api_running" => true, "version" => '1.0', "statusCode" => 200]);
         }     
     }    
 
