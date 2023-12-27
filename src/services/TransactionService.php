@@ -92,10 +92,7 @@ class TransactionService
 
     public static function update(object $transaction)
     {
-        if (!self::IdExists($transaction->id)) {
-            http_response_code(404);
-            echo json_encode(['message' => 'Transaction not found', 'statusCode' => 404]);
-        }
+        self::checkIfIdExists($transaction->getId());
 
         if (TransactionRepository::update($transaction)) {
             http_response_code(200);
@@ -111,11 +108,7 @@ class TransactionService
 
     public static function deleteById(int $id)
     {
-        if (!self::IdExists($id)) {
-            http_response_code(404);
-            echo json_encode(['message' => 'Transaction not found', 'statusCode' => 404]);
-            exit;
-        }
+        self::checkIfIdExists($id);
 
         if (TransactionRepository::deleteById($id)) {
             http_response_code(200);
@@ -129,10 +122,15 @@ class TransactionService
     // ********************************************************************************************
     // ******************************************************************************************** 
 
-    private static function IdExists(int $id): bool
+    private static function checkIfIdExists(int $id): void
     {
-        $transaction = TransactionRepository::selectById($id);
-        return (!empty($transaction)) ? true : false;
+        $result = TransactionRepository::selectById($id);
+
+        if(empty($result))
+        {
+            Response::json(['message' => 'Transaction not found'], 404);
+        }
+        
     }
 
     // ********************************************************************************************
