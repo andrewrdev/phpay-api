@@ -130,8 +130,8 @@ class TransactionService
     
     private static function checkIfSenderAndReceiverExists(object $transaction): void
     {
-        UserService::checkIfIdExists($transaction->getSenderId());
-        UserService::checkIfIdExists($transaction->getReceiverId()); 
+        UserService::checkIfUserExists($transaction->getSenderId());
+        UserService::checkIfUserExists($transaction->getReceiverId()); 
     }
 
     // ********************************************************************************************

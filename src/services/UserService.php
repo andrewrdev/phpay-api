@@ -49,7 +49,7 @@ class UserService
 
     public static function update(object $user)
     { 
-        self::checkIfIdExists($user->getId());
+        self::checkIfUserExists($user->getId());
 
         if (UserRepository::update($user)) {
             Response::json(['message' => 'User updated successfully'], 200);
@@ -63,7 +63,7 @@ class UserService
 
     public static function deleteById(int $id)
     {
-        self::checkIfIdExists($id);
+        self::checkIfUserExists($id);
 
         if (UserRepository::deleteById($id)) {
             Response::json(['message' => 'User deleted successfully'], 200);
@@ -77,7 +77,7 @@ class UserService
 
     public static function deposit(int $userId, float $amount)
     {
-        self::checkIfIdExists($userId);
+        self::checkIfUserExists($userId);
 
         if (UserRepository::updateBalance($userId, $amount)) {
             Response::json(['message' => 'Deposit done successfully'], 200);
@@ -91,7 +91,7 @@ class UserService
 
     public static function getBalance(int $userId)
     {
-        self::checkIfIdExists($userId);
+        self::checkIfUserExists($userId);
 
         return UserRepository::selectBalance($userId);
     }
@@ -101,7 +101,7 @@ class UserService
 
     public static function getType(int $userId)
     {
-        self::checkIfIdExists($userId);
+        self::checkIfUserExists($userId);
      
         return UserRepository::selectById($userId);
     }
@@ -109,7 +109,7 @@ class UserService
     // ********************************************************************************************
     // ********************************************************************************************
 
-    public static function checkIfIdExists(int $id): void
+    public static function checkIfUserExists(int $id): void
     {
         $user = UserRepository::selectById($id);
         
@@ -125,7 +125,7 @@ class UserService
     {
         $user = UserRepository::selectByEmail($email);
 
-        if(empty($user)) {
+        if(!empty($user)) {
             Response::json(['message' => 'User email already exists'], 409);
         } 
     }
@@ -137,7 +137,7 @@ class UserService
     {
         $user = UserRepository::selectByCpfCnpj($cpf_cnpj);
         
-        if(empty($user)) {
+        if(!empty($user)) {
             Response::json(['message' => 'User cpf_cnpj already exists'], 409);
         } 
     }
