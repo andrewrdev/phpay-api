@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace src\services;
 
+use src\app\http\Response;
+use src\classes\api\ApiRequest;
 use src\repositories\TransactionRepository;
 
 class TransactionService
@@ -41,7 +43,10 @@ class TransactionService
     // ********************************************************************************************
 
     public static function insert(object $transaction)
-    {
+    {      
+
+        self::checkIfTransactionIsAuthorized();
+
         if (!UserService::IdExists($transaction->getSenderId()) && !UserService::IdExists($transaction->getReceiverId())) {
             http_response_code(409);
             echo json_encode(['message' => 'Sender or receiver id not found', 'statusCode' => 409]);
@@ -128,6 +133,22 @@ class TransactionService
     {
         $transaction = TransactionRepository::selectById($id);
         return (!empty($transaction)) ? true : false;
+    }
+
+    // ********************************************************************************************
+    // ********************************************************************************************    
+
+    private static function checkIfTransactionIsAuthorized(): void
+    {
+        $data = ApiRequest::get('https://run.mocky.io/v3/5794d450-d2e2-4412-8131-73d0293ac1cc');
+        
+        if(!empty($data))
+        {
+            if (!$data['message'] === 'Autorizado')
+            {
+                Response::json(['message' => 'Transaction not authorized'], 401);            
+            }  
+        }           
     }
 
     // ********************************************************************************************
