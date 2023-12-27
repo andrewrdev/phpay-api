@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace src\repositories;
 
-use Exception;
 use src\classes\database\DatabaseConnection;
 use src\interfaces\repository\Repository;
+use src\app\http\Response;
+use Exception;
 use PDO;
 
 class UserRepository implements Repository
@@ -26,8 +27,7 @@ class UserRepository implements Repository
                 return $stmt->fetchAll(PDO::FETCH_ASSOC);
             }
         } catch (Exception $e) {
-            http_response_code(500);
-            echo json_encode(['message' => $e->getMessage()]);
+            Response::json(['message' => $e->getMessage()], 500); 
         } finally {
             $conn = null;
         }
@@ -49,8 +49,7 @@ class UserRepository implements Repository
                 return $stmt->fetch(PDO::FETCH_ASSOC);
             }
         } catch (Exception $e) {
-            http_response_code(500);
-            echo json_encode(['message' => $e->getMessage()]);
+            Response::json(['message' => $e->getMessage()], 500);             
         } finally {
             $conn = null;
         }
@@ -72,8 +71,7 @@ class UserRepository implements Repository
                 return $stmt->fetch(PDO::FETCH_ASSOC);
             }
         } catch (Exception $e) {
-            http_response_code(500);
-            echo json_encode(['message' => $e->getMessage()]);
+            Response::json(['message' => $e->getMessage()], 500); 
         } finally {
             $conn = null;
         }
@@ -95,8 +93,7 @@ class UserRepository implements Repository
                 return $stmt->fetch(PDO::FETCH_ASSOC);
             }
         } catch (Exception $e) {
-            http_response_code(500);
-            echo json_encode(['message' => $e->getMessage()]);
+            Response::json(['message' => $e->getMessage()], 500); 
         } finally {
             $conn = null;
         }
@@ -118,8 +115,7 @@ class UserRepository implements Repository
                 return $stmt->fetch(PDO::FETCH_ASSOC);
             }
         } catch (Exception $e) {
-            http_response_code(500);
-            echo json_encode(['message' => $e->getMessage()]);
+            Response::json(['message' => $e->getMessage()], 500); 
         } finally {
             $conn = null;
         }
@@ -151,9 +147,8 @@ class UserRepository implements Repository
         } catch (Exception $e) {
             if($conn) {
                 $conn->rollBack();
-            }
-            http_response_code(500);
-            echo json_encode(['message' => $e->getMessage()]);            
+            }            
+            Response::json(['message' => $e->getMessage()], 500);           
         } finally {
             $conn = null;
         }
@@ -183,8 +178,7 @@ class UserRepository implements Repository
             if($conn) {
                 $conn->rollBack();
             }            
-            http_response_code(500);
-            echo json_encode(['message' => $e->getMessage()]);            
+            Response::json(['message' => $e->getMessage()], 500);             
         } finally {            
             $conn = null;            
         }
@@ -208,8 +202,7 @@ class UserRepository implements Repository
             if($conn) {
                 $conn->rollBack();
             }
-            http_response_code(500);
-            echo json_encode(['message' => $e->getMessage()]);
+            Response::json(['message' => $e->getMessage()], 500); 
         } finally {
             $conn = null;
         }
@@ -233,13 +226,11 @@ class UserRepository implements Repository
             if($conn) {
                 $conn->rollBack();
             }
-            http_response_code(500);
-            echo json_encode(['message' => $e->getMessage()]);
+            Response::json(['message' => $e->getMessage()], 500); 
         } finally {
             $conn = null;
         }
     }
-
     // ********************************************************************************************
     // ********************************************************************************************    
 }
