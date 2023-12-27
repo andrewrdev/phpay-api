@@ -16,11 +16,7 @@ class UserService
     {
         $users = UserRepository::selectAll();
 
-        if (!empty($users)) {
-            return $users;
-        } else {
-            Response::json(['message' => 'Users not found'], 404);             
-        }
+        return (!empty($users)) ? $users : Response::json(['message' => 'Users not found'], 404);        
     }
 
     // ********************************************************************************************
@@ -29,12 +25,8 @@ class UserService
     public static function selectById(int $id)
     {
         $user = UserRepository::selectById($id);
-        
-        if (!empty($user)) {
-            return $user;
-        } else {
-            Response::json(['message' => 'User not found'], 404);
-        }
+
+        return (!empty($user)) ? $user : Response::json(['message' => 'User not found'], 404);  
     }
 
     // ********************************************************************************************
@@ -42,13 +34,8 @@ class UserService
 
     public static function insert(object $user)
     {
-        if (self::emailExists($user->getEmail())) {
-            Response::json(['message' => 'User email already exists'], 409);
-        }
-
-        if (self::cpfCnpjExists($user->getCpfCnpj())) {
-            Response::json(['message' => 'User cpf_cnpj already exists'], 409);
-        }        
+        self::checkIfEmailExists($user->getEmail());
+        self::checkIfCpfCnpjExists($user->getCpfCnpj());              
 
         if (UserRepository::insert($user)) {
             Response::json(['message' => 'User created successfully'], 201);
@@ -61,10 +48,8 @@ class UserService
     // ********************************************************************************************
 
     public static function update(object $user)
-    {
-        if (!self::IdExists($user->getId())) {
-            Response::json(['message' => 'User not found'], 404);
-        }       
+    { 
+        self::checkIfIdExists($user->getId());
 
         if (UserRepository::update($user)) {
             Response::json(['message' => 'User updated successfully'], 200);
@@ -78,9 +63,7 @@ class UserService
 
     public static function deleteById(int $id)
     {
-        if (!self::IdExists($id)) {
-            Response::json(['message' => 'User not found'], 404);      
-        }
+        self::checkIfIdExists($id);
 
         if (UserRepository::deleteById($id)) {
             Response::json(['message' => 'User deleted successfully'], 200);
@@ -94,9 +77,7 @@ class UserService
 
     public static function deposit(int $userId, float $amount)
     {
-        if (!self::IdExists($userId)) {
-            Response::json(['message' => 'User not found'], 404);           
-        }
+        self::checkIfIdExists($userId);
 
         if (UserRepository::updateBalance($userId, $amount)) {
             Response::json(['message' => 'Deposit done successfully'], 200);
@@ -110,11 +91,9 @@ class UserService
 
     public static function getBalance(int $userId)
     {
-        if (!self::IdExists($userId)) {
-            Response::json(['message' => 'User not found'], 404);         
-        } else {
-            return UserRepository::selectBalance($userId);
-        }        
+        self::checkIfIdExists($userId);
+
+        return UserRepository::selectBalance($userId);
     }
 
     // ********************************************************************************************
@@ -122,38 +101,45 @@ class UserService
 
     public static function getType(int $userId)
     {
-        if (!self::IdExists($userId)) {
-            Response::json(['message' => 'User not found'], 404);       
-        } else {
-            return UserRepository::selectById($userId);
-        }        
+        self::checkIfIdExists($userId);
+     
+        return UserRepository::selectById($userId);
     }
 
     // ********************************************************************************************
     // ********************************************************************************************
 
-    public static function IdExists(int $id): bool
+    public static function checkIfIdExists(int $id): void
     {
         $user = UserRepository::selectById($id);
-        return (!empty($user)) ? true : false;
+        
+        if(empty($user)) {
+            Response::json(['message' => 'User not found'], 404);
+        } 
     }
 
     // ********************************************************************************************
     // ********************************************************************************************
 
-    private static function emailExists(string $email): bool
+    private static function checkIfEmailExists(string $email): void
     {
         $user = UserRepository::selectByEmail($email);
-        return (!empty($user)) ? true : false;
+
+        if(empty($user)) {
+            Response::json(['message' => 'User email already exists'], 409);
+        } 
     }
 
     // ********************************************************************************************
     // ********************************************************************************************
 
-    private static function cpfCnpjExists(string $cpf_cnpj): bool
+    private static function checkIfCpfCnpjExists(string $cpf_cnpj): void
     {
         $user = UserRepository::selectByCpfCnpj($cpf_cnpj);
-        return (!empty($user)) ? true : false;
+        
+        if(empty($user)) {
+            Response::json(['message' => 'User cpf_cnpj already exists'], 409);
+        } 
     }
 
     // ********************************************************************************************
