@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace src\services;
 
+use src\app\http\Response;
 use src\repositories\UserRepository;
 
 class UserService
@@ -18,8 +19,7 @@ class UserService
         if (!empty($users)) {
             return $users;
         } else {
-            http_response_code(404);
-            echo json_encode(['message' => 'Users not found', 'statusCode' => 404]);
+            Response::json(['message' => 'Users not found'], 404);             
         }
     }
 
@@ -29,11 +29,11 @@ class UserService
     public static function selectById(int $id)
     {
         $user = UserRepository::selectById($id);
+        
         if (!empty($user)) {
             return $user;
         } else {
-            http_response_code(404);
-            echo json_encode(['message' => 'User not found', 'statusCode' => 404]);
+            Response::json(['message' => 'User not found'], 404);
         }
     }
 
@@ -43,23 +43,17 @@ class UserService
     public static function insert(object $user)
     {
         if (self::emailExists($user->getEmail())) {
-            http_response_code(409);
-            echo json_encode(['message' => 'User email already exists', 'statusCode' => 409]);
-            exit;
+            Response::json(['message' => 'User email already exists'], 409);
         }
 
         if (self::cpfCnpjExists($user->getCpfCnpj())) {
-            http_response_code(409);
-            echo json_encode(['message' => 'User cpf_cnpj already exists', 'statusCode' => 409]);
-            exit;
+            Response::json(['message' => 'User cpf_cnpj already exists'], 409);
         }        
 
         if (UserRepository::insert($user)) {
-            http_response_code(201);
-            echo json_encode(['message' => 'User created successfully', 'statusCode' => 201]);
+            Response::json(['message' => 'User created successfully'], 201);
         } else {
-            http_response_code(500);
-            echo json_encode(['message' => 'User could not be created', 'statusCode' => 500]);
+            Response::json(['message' => 'User could not be created'], 500);
         }
     }
 
@@ -69,17 +63,13 @@ class UserService
     public static function update(object $user)
     {
         if (!self::IdExists($user->getId())) {
-            http_response_code(404);
-            echo json_encode(['message' => 'Error updating user - User not found', 'statusCode' => 404]);
-            exit;
+            Response::json(['message' => 'User not found'], 404);
         }       
 
         if (UserRepository::update($user)) {
-            http_response_code(201);
-            echo json_encode(['message' => 'User updated successfully', 'statusCode' => 201]);
+            Response::json(['message' => 'User updated successfully'], 200);
         } else {
-            http_response_code(500);
-            echo json_encode(['message' => 'User could not be updated', 'statusCode' => 500]);
+            Response::json(['message' => 'User could not be updated'], 500);
         }
     }
 
@@ -89,17 +79,13 @@ class UserService
     public static function deleteById(int $id)
     {
         if (!self::IdExists($id)) {
-            http_response_code(404);
-            echo json_encode(['message' => 'Error deleting user - User not found', 'statusCode' => 404]);
-            exit;            
+            Response::json(['message' => 'User not found'], 404);      
         }
 
         if (UserRepository::deleteById($id)) {
-            http_response_code(200);
-            echo json_encode(['message' => 'User deleted successfully', 'statusCode' => 200]);
+            Response::json(['message' => 'User deleted successfully'], 200);
         } else {
-            http_response_code(500);
-            echo json_encode(['message' => 'User could not be deleted', 'statusCode' => 500]);
+            Response::json(['message' => 'User could not be deleted'], 500);
         }
     }
 
@@ -109,17 +95,13 @@ class UserService
     public static function deposit(int $userId, float $amount)
     {
         if (!self::IdExists($userId)) {
-            http_response_code(404);
-            echo json_encode(['message' => 'Error depositing - User not found', 'statusCode' => 404]);
-            exit;            
+            Response::json(['message' => 'User not found'], 404);           
         }
 
         if (UserRepository::updateBalance($userId, $amount)) {
-            http_response_code(200);
-            echo json_encode(['message' => 'Deposit successfully', 'statusCode' => 200]);
+            Response::json(['message' => 'Deposit done successfully'], 200);
         } else {
-            http_response_code(500);
-            echo json_encode(['message' => 'Deposit could not be done', 'statusCode' => 500]);
+            Response::json(['message' => 'Deposit could not be done'], 500);
         }
     }
 
@@ -129,9 +111,7 @@ class UserService
     public static function getBalance(int $userId)
     {
         if (!self::IdExists($userId)) {
-            http_response_code(404);
-            echo json_encode(['message' => 'Error getting balance - User not found', 'statusCode' => 404]);
-            exit;            
+            Response::json(['message' => 'User not found'], 404);         
         } else {
             return UserRepository::selectBalance($userId);
         }        
@@ -143,9 +123,7 @@ class UserService
     public static function getType(int $userId)
     {
         if (!self::IdExists($userId)) {
-            http_response_code(404);
-            echo json_encode(['message' => 'Error getting user type - User not found', 'statusCode' => 404]);
-            exit;            
+            Response::json(['message' => 'User not found'], 404);       
         } else {
             return UserRepository::selectById($userId);
         }        
