@@ -21,7 +21,11 @@ class Response
                 case 400:
                     $message['error'] = 'Bad Request';
                     $message['statusCode'] = 400;
-                    break;                
+                    break;  
+                case 401:
+                    $message['error'] = 'Unauthorized';
+                    $message['statusCode'] = 401;
+                    break;              
                 case 404:
                     $message['error'] = 'Not Found'; 
                     $message['statusCode'] = 404; 
