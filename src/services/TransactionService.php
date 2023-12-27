@@ -16,12 +16,8 @@ class TransactionService
     public static function selectAll()
     {
         $transactions = TransactionRepository::selectAll();
-        if (!empty($transactions)) {
-            return $transactions;
-        } else {
-            http_response_code(404);
-            echo json_encode(['message' => 'Transactions not found', 'statusCode' => 404]);
-        }
+
+        return (!empty($transactions)) ? $transactions : Response::json(['message' => 'Transactions not found'], 404);        
     }
 
     // ********************************************************************************************
@@ -30,13 +26,8 @@ class TransactionService
     public static function selectById(int $id)
     {
         $transaction = TransactionRepository::selectById($id);
-        if (!empty($transaction)) {
-            return $transaction;
-        } else {
-            http_response_code(404);
-            echo json_encode(['message' => 'Transaction not found', 'statusCode' => 404]);
-            exit;
-        }
+
+        return (!empty($transaction)) ? $transaction : Response::json(['message' => 'Transaction not found'], 404);       
     }
 
     // ********************************************************************************************
@@ -44,46 +35,16 @@ class TransactionService
 
     public static function insert(object $transaction)
     {      
-
         self::checkIfTransactionIsAuthorized();
-
-        if (!UserService::IdExists($transaction->getSenderId()) && !UserService::IdExists($transaction->getReceiverId())) {
-            http_response_code(409);
-            echo json_encode(['message' => 'Sender or receiver id not found', 'statusCode' => 409]);
-            exit;            
-        }  
-
-        if ($transaction->getSenderId() === $transaction->getReceiverId()) {
-            http_response_code(409);
-            echo json_encode(['message' => 'Sender and receiver cannot be the same', 'statusCode' => 409]);
-            exit;                      
-        }
-
-        $senderBalance = UserService::getBalance($transaction->getSenderId());
-
-        if($senderBalance['balance'] < $transaction->getAmount())
-        {
-            http_response_code(409);
-            echo json_encode(['message' => 'Sender does not have enough balance', 'statusCode' => 409]);
-            exit;
-        }
-
-        $senderType = UserService::getType($transaction->getSenderId());
-
-        if($senderType['type'] === 'retailer')
-        {
-            http_response_code(409);
-            echo json_encode(['message' => 'Retailer cannot send money', 'statusCode' => 409]);
-            exit;
-        }
+        self::checkIfSenderAndReceiverExists($transaction);
+        self::checkIfSenderAndReceiverAreNotTheSame($transaction);
+        self::checkIfSenderHaveBalance($transaction);        
+        self::checkIfSenderAreNotRetailer($transaction);         
 
         if (TransactionRepository::insert($transaction)) {            
-            http_response_code(201);
-            echo json_encode(['message' => 'Transaction created successfully', 'statusCode' => 201]);
+            Response::json(['message' => 'Transaction created successfully'], 201);
         } else {
-            http_response_code(500);
-            echo json_encode(['message' => 'Transaction could not be created', 'statusCode' => 500]);
-            exit;
+            Response::json(['message' => 'Transaction could not be created'], 500);
         }
     }
 
@@ -95,11 +56,9 @@ class TransactionService
         self::checkIfIdExists($transaction->getId());
 
         if (TransactionRepository::update($transaction)) {
-            http_response_code(200);
-            echo json_encode(['message' => 'Transaction updated successfully', 'statusCode' => 200]);
+            Response::json(['message' => 'Transaction updated successfully'], 200);
         } else {
-            http_response_code(500);
-            echo json_encode(['message' => 'Transaction could not be updated', 'statusCode' => 500]);
+            Response::json(['message' => 'Transaction could not be updated'], 500);
         }
     }
 
@@ -111,11 +70,9 @@ class TransactionService
         self::checkIfIdExists($id);
 
         if (TransactionRepository::deleteById($id)) {
-            http_response_code(200);
-            echo json_encode(['message' => 'Transaction deleted successfully', 'statusCode' => 200]);
+            Response::json(['message' => 'Transaction deleted successfully'], 200);            
         } else {
-            http_response_code(500);
-            echo json_encode(['message' => 'Transaction could not be deleted', 'statusCode' => 500]);
+            Response::json(['message' => 'Transaction could not be deleted'], 500);
         }
     }
 
@@ -124,9 +81,9 @@ class TransactionService
 
     private static function checkIfIdExists(int $id): void
     {
-        $result = TransactionRepository::selectById($id);
+        $transaction = TransactionRepository::selectById($id);
 
-        if(empty($result))
+        if(empty($transaction))
         {
             Response::json(['message' => 'Transaction not found'], 404);
         }
@@ -134,7 +91,52 @@ class TransactionService
     }
 
     // ********************************************************************************************
-    // ********************************************************************************************    
+    // ********************************************************************************************
+    
+    private static function checkIfSenderHaveBalance(object $transaction): void
+    {
+        $sender = UserService::getBalance($transaction->getSenderId());
+
+        if($sender['balance'] < $transaction->getAmount())
+        {
+            Response::json(['message' => 'Sender does not have enough balance'], 409);            
+        }        
+    }
+
+    // ********************************************************************************************
+    // ********************************************************************************************
+    
+    private static function checkIfSenderAndReceiverAreNotTheSame(object $transaction): void
+    {
+        if ($transaction->getSenderId() === $transaction->getReceiverId()) {
+            Response::json(['message' => 'Sender and receiver cannot be the same'], 409);                                 
+        } 
+    }
+
+    // ********************************************************************************************
+    // ********************************************************************************************
+
+    private static function checkIfSenderAreNotRetailer(object $transaction): void
+    {
+        $sender = UserService::getType($transaction->getSenderId());
+
+        if($sender['type'] === 'retailer')
+        {
+            Response::json(['message' => 'Retailer cannot send money'], 409);            
+        }
+    }
+
+    // ********************************************************************************************
+    // ********************************************************************************************
+    
+    private static function checkIfSenderAndReceiverExists(object $transaction): void
+    {
+        UserService::checkIfIdExists($transaction->getSenderId());
+        UserService::checkIfIdExists($transaction->getReceiverId()); 
+    }
+
+    // ********************************************************************************************
+    // ********************************************************************************************
 
     private static function checkIfTransactionIsAuthorized(): void
     {
@@ -146,7 +148,9 @@ class TransactionService
             {
                 Response::json(['message' => 'Transaction not authorized'], 401);            
             }  
-        }           
+        } else {
+            Response::json(['message' => 'Transaction not authorized'], 401);
+        }            
     }
 
     // ********************************************************************************************
