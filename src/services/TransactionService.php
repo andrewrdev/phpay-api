@@ -38,8 +38,8 @@ class TransactionService
         self::checkIfTransactionIsAuthorized();
         self::checkIfSenderAndReceiverExists($transaction);
         self::checkIfSenderAndReceiverAreNotTheSame($transaction);
-        self::checkIfSenderHaveBalance($transaction);        
         self::checkIfSenderAreNotRetailer($transaction);         
+        self::checkIfSenderHaveBalance($transaction);        
 
         if (TransactionRepository::insert($transaction)) {            
             Response::json(['message' => 'Transaction created successfully'], 201);
@@ -53,7 +53,7 @@ class TransactionService
 
     public static function update(object $transaction)
     {
-        self::checkIfIdExists($transaction->getId());
+        self::checkIfTransactionExists($transaction->getId());
 
         if (TransactionRepository::update($transaction)) {
             Response::json(['message' => 'Transaction updated successfully'], 200);
@@ -67,7 +67,7 @@ class TransactionService
 
     public static function deleteById(int $id)
     {
-        self::checkIfIdExists($id);
+        self::checkIfTransactionExists($id);
 
         if (TransactionRepository::deleteById($id)) {
             Response::json(['message' => 'Transaction deleted successfully'], 200);            
@@ -79,15 +79,14 @@ class TransactionService
     // ********************************************************************************************
     // ******************************************************************************************** 
 
-    private static function checkIfIdExists(int $id): void
+    private static function checkIfTransactionExists(int $id): void
     {
         $transaction = TransactionRepository::selectById($id);
 
         if(empty($transaction))
         {
             Response::json(['message' => 'Transaction not found'], 404);
-        }
-        
+        }        
     }
 
     // ********************************************************************************************
@@ -140,11 +139,11 @@ class TransactionService
 
     private static function checkIfTransactionIsAuthorized(): void
     {
-        $data = ApiRequest::get('https://run.mocky.io/v3/5794d450-d2e2-4412-8131-73d0293ac1cc');
+        $response = ApiRequest::get('https://run.mocky.io/v3/5794d450-d2e2-4412-8131-73d0293ac1cc');
         
-        if(!empty($data))
+        if(!empty($response))
         {
-            if (!$data['message'] === 'Autorizado')
+            if (!$response['message'] === 'Autorizado')
             {
                 Response::json(['message' => 'Transaction not authorized'], 401);            
             }  
