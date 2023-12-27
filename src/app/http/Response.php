@@ -12,10 +12,12 @@ class Response
     public static function json(array $message = [], int $statusCode = 200): void
     {
         if (!empty($message)) {
+
+            $message['statusCode'] = $statusCode;
             
             switch ($statusCode) { 
                 case 201:
-                    $message['success'] = 'Created';    
+                    $message['success'] = 'Created';
                     break;
                 case 400:
                     $message['error'] = 'Bad Request';
@@ -38,7 +40,7 @@ class Response
                 default:
                     $message['success'] = 'OK';
                     break;  
-            }
+            }           
 
             header('Content-Type: application/json');
             http_response_code($statusCode);
