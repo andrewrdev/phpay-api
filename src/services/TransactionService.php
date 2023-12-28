@@ -35,11 +35,11 @@ class TransactionService
 
     public static function insert(object $transaction)
     {
-        self::checkIfTransactionIsAuthorized();
         self::checkIfSenderAndReceiverExists($transaction);
         self::checkIfSenderAndReceiverAreNotTheSame($transaction);
         self::checkIfSenderAreNotRetailer($transaction);
         self::checkIfSenderHaveBalance($transaction);
+        self::checkIfTransactionIsAuthorized();
 
         if (TransactionRepository::insert($transaction)) {
             Response::json(['message' => 'Transaction created successfully'], 201);
