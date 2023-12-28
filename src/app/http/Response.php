@@ -11,38 +11,38 @@ class Response
 
     public static function json(array $message = [], int $statusCode = 200): void
     {
-        if (!empty($message)) {            
-            
-            switch ($statusCode) { 
+        if (!empty($message)) {
+
+            switch ($statusCode) {
                 case 201:
-                    $message['success'] = 'Created';
+                    $message['status'] = 'Created';
                     $message['statusCode'] = 201;
                     break;
                 case 400:
-                    $message['error'] = 'Bad Request';
+                    $message['status'] = 'Bad Request';
                     $message['statusCode'] = 400;
-                    break;  
+                    break;
                 case 401:
-                    $message['error'] = 'Unauthorized';
+                    $message['status'] = 'Unauthorized';
                     $message['statusCode'] = 401;
-                    break;              
+                    break;
                 case 404:
-                    $message['error'] = 'Not Found'; 
-                    $message['statusCode'] = 404; 
-                    break;                
+                    $message['status'] = 'Not Found';
+                    $message['statusCode'] = 404;
+                    break;
                 case 409:
-                    $message['error'] = 'Conflict';
+                    $message['status'] = 'Conflict';
                     $message['statusCode'] = 409;
-                    break;                
+                    break;
                 case 500:
-                    $message['error'] = 'Internal Server Error';
+                    $message['status'] = 'Internal Server Error';
                     $message['statusCode'] = 500;
                     break;
                 case 503:
-                    $message['error'] = 'Service Unavailable';
+                    $message['status'] = 'Service Unavailable';
                     $message['statusCode'] = 503;
-                    break;                
-            }           
+                    break;
+            }
 
             header('Content-Type: application/json');
             http_response_code($statusCode);

@@ -16,10 +16,10 @@ class Request
     {
         return $this->urlParams[$param];
     }
-    
+
     // ********************************************************************************************
     // ********************************************************************************************
-    
+
     public function setParamsFromURL(array $urlParams): void
     {
         $this->urlParams = $urlParams;
