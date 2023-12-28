@@ -16,7 +16,7 @@ class UserService
     {
         $users = UserRepository::selectAll();
 
-        return (!empty($users)) ? $users : Response::json(['message' => 'Users not found'], 404);        
+        return (!empty($users)) ? $users : Response::json(['message' => 'Users not found'], 404);
     }
 
     // ********************************************************************************************
@@ -26,7 +26,7 @@ class UserService
     {
         $user = UserRepository::selectById($id);
 
-        return (!empty($user)) ? $user : Response::json(['message' => 'User not found'], 404);  
+        return (!empty($user)) ? $user : Response::json(['message' => 'User not found'], 404);
     }
 
     // ********************************************************************************************
@@ -35,7 +35,7 @@ class UserService
     public static function insert(object $user)
     {
         self::checkIfEmailExists($user->getEmail());
-        self::checkIfCpfCnpjExists($user->getCpfCnpj());              
+        self::checkIfCpfCnpjExists($user->getCpfCnpj());
 
         if (UserRepository::insert($user)) {
             Response::json(['message' => 'User created successfully'], 201);
@@ -48,7 +48,7 @@ class UserService
     // ********************************************************************************************
 
     public static function update(object $user)
-    { 
+    {
         self::checkIfUserExists($user->getId());
 
         if (UserRepository::update($user)) {
@@ -102,7 +102,7 @@ class UserService
     public static function getType(int $userId)
     {
         self::checkIfUserExists($userId);
-     
+
         return UserRepository::selectById($userId);
     }
 
@@ -112,10 +112,10 @@ class UserService
     public static function checkIfUserExists(int $id): void
     {
         $user = UserRepository::selectById($id);
-        
-        if(empty($user)) {
+
+        if (empty($user)) {
             Response::json(['message' => 'User not found'], 404);
-        } 
+        }
     }
 
     // ********************************************************************************************
@@ -125,9 +125,9 @@ class UserService
     {
         $user = UserRepository::selectByEmail($email);
 
-        if(!empty($user)) {
+        if (!empty($user)) {
             Response::json(['message' => 'User email already exists'], 409);
-        } 
+        }
     }
 
     // ********************************************************************************************
@@ -136,10 +136,10 @@ class UserService
     private static function checkIfCpfCnpjExists(string $cpf_cnpj): void
     {
         $user = UserRepository::selectByCpfCnpj($cpf_cnpj);
-        
-        if(!empty($user)) {
+
+        if (!empty($user)) {
             Response::json(['message' => 'User cpf_cnpj already exists'], 409);
-        } 
+        }
     }
 
     // ********************************************************************************************

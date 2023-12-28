@@ -23,11 +23,11 @@ class UserRepository implements Repository
             $stmt = $conn->prepare($query);
             $stmt->execute();
 
-            if ($stmt->rowCount() > 0) {                
+            if ($stmt->rowCount() > 0) {
                 return $stmt->fetchAll(PDO::FETCH_ASSOC);
             }
         } catch (Exception $e) {
-            Response::json(['message' => $e->getMessage()], 500); 
+            Response::json(['message' => $e->getMessage()], 500);
         } finally {
             $conn = null;
         }
@@ -45,11 +45,11 @@ class UserRepository implements Repository
             $stmt = $conn->prepare($query);
             $stmt->execute(array($userId));
 
-            if ($stmt->rowCount() > 0) {                
+            if ($stmt->rowCount() > 0) {
                 return $stmt->fetch(PDO::FETCH_ASSOC);
             }
         } catch (Exception $e) {
-            Response::json(['message' => $e->getMessage()], 500);             
+            Response::json(['message' => $e->getMessage()], 500);
         } finally {
             $conn = null;
         }
@@ -62,16 +62,16 @@ class UserRepository implements Repository
     {
         $conn = null;
         try {
-            $conn = DatabaseConnection::getConnection();            
+            $conn = DatabaseConnection::getConnection();
             $query = "SELECT * FROM users WHERE id = ? LIMIT 1";
             $stmt = $conn->prepare($query);
             $stmt->execute(array($id));
 
-            if ($stmt->rowCount() > 0) {                
+            if ($stmt->rowCount() > 0) {
                 return $stmt->fetch(PDO::FETCH_ASSOC);
             }
         } catch (Exception $e) {
-            Response::json(['message' => $e->getMessage()], 500); 
+            Response::json(['message' => $e->getMessage()], 500);
         } finally {
             $conn = null;
         }
@@ -82,18 +82,18 @@ class UserRepository implements Repository
 
     public static function selectByEmail(string $email)
     {
-        $conn = null;        
+        $conn = null;
         try {
             $conn = DatabaseConnection::getConnection();
             $query = "SELECT * FROM users WHERE email = ? LIMIT 1";
             $stmt = $conn->prepare($query);
             $stmt->execute(array($email));
 
-            if ($stmt->rowCount() > 0) {                
+            if ($stmt->rowCount() > 0) {
                 return $stmt->fetch(PDO::FETCH_ASSOC);
             }
         } catch (Exception $e) {
-            Response::json(['message' => $e->getMessage()], 500); 
+            Response::json(['message' => $e->getMessage()], 500);
         } finally {
             $conn = null;
         }
@@ -104,18 +104,18 @@ class UserRepository implements Repository
 
     public static function selectByCpfCnpj(string $cpf_cnpj)
     {
-        $conn = null;        
+        $conn = null;
         try {
             $conn = DatabaseConnection::getConnection();
             $query = "SELECT * FROM users WHERE cpf_cnpj = ? LIMIT 1";
             $stmt = $conn->prepare($query);
             $stmt->execute(array($cpf_cnpj));
 
-            if ($stmt->rowCount() > 0) {                
+            if ($stmt->rowCount() > 0) {
                 return $stmt->fetch(PDO::FETCH_ASSOC);
             }
         } catch (Exception $e) {
-            Response::json(['message' => $e->getMessage()], 500); 
+            Response::json(['message' => $e->getMessage()], 500);
         } finally {
             $conn = null;
         }
@@ -126,9 +126,9 @@ class UserRepository implements Repository
 
     public static function insert(object $user)
     {
-        $conn = null; 
+        $conn = null;
         try {
-            $conn = DatabaseConnection::getConnection();            
+            $conn = DatabaseConnection::getConnection();
             $conn->beginTransaction();
             $query = "INSERT INTO users (`full_name`,`cpf_cnpj`, `email`,`password`,`type`) 
                       VALUES (?, ?, ?, ?, ?)";
@@ -136,19 +136,19 @@ class UserRepository implements Repository
             $stmt = $conn->prepare($query);
             $stmt->execute(array(
                 $user->getFullName(),
-                $user->getCpfCnpj(),                
+                $user->getCpfCnpj(),
                 $user->getEmail(),
                 $user->getPassword(),
                 $user->getType()
             ));
 
-            $conn->commit(); 
-            return $conn; 
+            $conn->commit();
+            return $conn;
         } catch (Exception $e) {
-            if($conn) {
+            if ($conn !== null) {
                 $conn->rollBack();
-            }            
-            Response::json(['message' => $e->getMessage()], 500);           
+            }
+            Response::json(['message' => $e->getMessage()], 500);
         } finally {
             $conn = null;
         }
@@ -167,20 +167,20 @@ class UserRepository implements Repository
 
             $stmt = $conn->prepare($query);
             $stmt->execute(array(
-                $user->getFullName(),                
-                $user->getPassword(),                
+                $user->getFullName(),
+                $user->getPassword(),
                 $user->getId()
             ));
 
-            $conn->commit(); 
+            $conn->commit();
             return $conn;
         } catch (Exception $e) {
-            if($conn) {
+            if ($conn !== null) {
                 $conn->rollBack();
-            }            
-            Response::json(['message' => $e->getMessage()], 500);             
-        } finally {            
-            $conn = null;            
+            }
+            Response::json(['message' => $e->getMessage()], 500);
+        } finally {
+            $conn = null;
         }
     }
 
@@ -196,13 +196,13 @@ class UserRepository implements Repository
             $query = "DELETE FROM users WHERE id = ?";
             $stmt = $conn->prepare($query);
             $stmt->execute(array($id));
-            $conn->commit(); 
+            $conn->commit();
             return $conn;
         } catch (Exception $e) {
-            if($conn) {
+            if ($conn !== null) {
                 $conn->rollBack();
             }
-            Response::json(['message' => $e->getMessage()], 500); 
+            Response::json(['message' => $e->getMessage()], 500);
         } finally {
             $conn = null;
         }
@@ -220,13 +220,13 @@ class UserRepository implements Repository
             $query = "UPDATE users SET balance = balance + ? WHERE id = ?";
             $stmt = $conn->prepare($query);
             $stmt->execute(array($amount, $userId));
-            $conn->commit(); 
+            $conn->commit();
             return $conn;
         } catch (Exception $e) {
-            if($conn) {
+            if ($conn !== null) {
                 $conn->rollBack();
             }
-            Response::json(['message' => $e->getMessage()], 500); 
+            Response::json(['message' => $e->getMessage()], 500);
         } finally {
             $conn = null;
         }

@@ -16,12 +16,12 @@ class UserController
     // ********************************************************************************************
 
     public function selectAll(Request $request, Response $response)
-    {  
+    {
         $users = UserService::selectAll();
 
-        if(!empty($users)) {
-            $response->json($users);           
-        }        
+        if (!empty($users)) {
+            $response->json($users);
+        }
     }
 
     // ********************************************************************************************
@@ -30,10 +30,10 @@ class UserController
     public function selectOne(Request $request, Response $response)
     {
         $id = (int) $request->pathParam('id');
-        $users = UserService::selectById($id);        
-        if(!empty($users)) {
-            $response->json($users);           
-        }  
+        $users = UserService::selectById($id);
+        if (!empty($users)) {
+            $response->json($users);
+        }
     }
 
     // ********************************************************************************************
@@ -43,47 +43,47 @@ class UserController
     {
         $user = new UserModel();
         $user->setFullName($request->getParam('full_name'));
-        $user->setCpfCnpj($request->getParam('cpf_cnpj'));        
+        $user->setCpfCnpj($request->getParam('cpf_cnpj'));
         $user->setEmail($request->getParam('email'));
         $user->setPassword($request->getParam('password'));
         $user->setType($request->getParam('type'));
 
-        UserService::insert($user);      
+        UserService::insert($user);
     }
-    
+
     // ********************************************************************************************
     // ********************************************************************************************
 
     public function update(Request $request, Response $response)
     {
         $user = new UserModel();
-        $user->setFullName($request->getParam('full_name'));        
-        $user->setPassword($request->getParam('password'));        
+        $user->setFullName($request->getParam('full_name'));
+        $user->setPassword($request->getParam('password'));
         $user->setId((int) $request->pathParam('id'));
 
-        UserService::update($user);        
+        UserService::update($user);
     }
-    
+
     // ********************************************************************************************
     // ********************************************************************************************
 
     public function delete(Request $request, Response $response)
     {
         $id = (int) $request->PathParam('id');
-        UserService::deleteById($id);      
+        UserService::deleteById($id);
     }
-    
+
     // ********************************************************************************************
     // ********************************************************************************************
 
     public function deposit(Request $request, Response $response)
-    {           
+    {
         $user_id = (int) $request->getParam('user_id');
         $amount = (float) $request->getParam('amount');
 
         UserService::deposit($user_id, $amount);
     }
-    
+
     // ********************************************************************************************
     // ********************************************************************************************
 }

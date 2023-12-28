@@ -36,11 +36,11 @@ class TransactionRepository implements Repository
             $stmt = $conn->prepare($query);
             $stmt->execute();
 
-            if ($stmt->rowCount() > 0) {                
+            if ($stmt->rowCount() > 0) {
                 return $stmt->fetchAll(PDO::FETCH_ASSOC);
             }
         } catch (Exception $e) {
-            Response::json(['message' => $e->getMessage()], 500); 
+            Response::json(['message' => $e->getMessage()], 500);
         } finally {
             $conn = null;
         }
@@ -53,7 +53,7 @@ class TransactionRepository implements Repository
     {
         $conn = null;
         try {
-            $conn = DatabaseConnection::getConnection();            
+            $conn = DatabaseConnection::getConnection();
             $query = "SELECT 
                  transactions.id,
                  transactions.amount, 
@@ -70,11 +70,11 @@ class TransactionRepository implements Repository
             $stmt = $conn->prepare($query);
             $stmt->execute(array($id));
 
-            if ($stmt->rowCount() > 0) {                
+            if ($stmt->rowCount() > 0) {
                 return $stmt->fetch(PDO::FETCH_ASSOC);
             }
         } catch (Exception $e) {
-            Response::json(['message' => $e->getMessage()], 500); 
+            Response::json(['message' => $e->getMessage()], 500);
         } finally {
             $conn = null;
         }
@@ -85,10 +85,12 @@ class TransactionRepository implements Repository
 
     public static function insert(object $transaction)
     {
-        $conn = null; 
+        $conn = null;
+
         try {
-            $conn = DatabaseConnection::getConnection();            
+            $conn = DatabaseConnection::getConnection();
             $conn->beginTransaction();
+
             $query = "INSERT INTO transactions (`amount`,`sender_id`, `receiver_id`) 
                       VALUES (?, ?, ?)";
 
@@ -99,7 +101,7 @@ class TransactionRepository implements Repository
                 $transaction->getReceiverId()
             ));
 
-            $query = "UPDATE users SET balance = balance + ? WHERE id = ?";  
+            $query = "UPDATE users SET balance = balance + ? WHERE id = ?";
             $stmt = $conn->prepare($query);
             $stmt->execute(array(
                 $transaction->getAmount(),
@@ -113,14 +115,15 @@ class TransactionRepository implements Repository
                 $transaction->getSenderId()
             ));
 
-            $conn->commit(); 
+            $conn->commit();
 
-            return $conn; 
+            return $conn;
         } catch (Exception $e) {
-            if($conn) {
+            if ($conn !== null) {
                 $conn->rollBack();
             }
-            Response::json(['message' => $e->getMessage()], 500);           
+
+            Response::json(['message' => $e->getMessage()], 500);
         } finally {
             $conn = null;
         }
@@ -145,15 +148,16 @@ class TransactionRepository implements Repository
                 $transaction->getId()
             ));
 
-            $conn->commit(); 
+            $conn->commit();
             return $conn;
         } catch (Exception $e) {
-            if($conn) {
+            if ($conn !== null) {
                 $conn->rollBack();
-            }            
-            Response::json(['message' => $e->getMessage()], 500);          
-        } finally {            
-            $conn = null;            
+            }
+
+            Response::json(['message' => $e->getMessage()], 500);
+        } finally {
+            $conn = null;
         }
     }
 
@@ -169,13 +173,14 @@ class TransactionRepository implements Repository
             $query = "DELETE FROM transactions WHERE id = ?";
             $stmt = $conn->prepare($query);
             $stmt->execute(array($id));
-            $conn->commit(); 
+            $conn->commit();
             return $conn;
         } catch (Exception $e) {
-            if($conn) {
+            if ($conn !== null) {
                 $conn->rollBack();
             }
-            Response::json(['message' => $e->getMessage()], 500); 
+            
+            Response::json(['message' => $e->getMessage()], 500);
         } finally {
             $conn = null;
         }

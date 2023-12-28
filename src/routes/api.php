@@ -2,7 +2,7 @@
 
 use src\app\router\Router;
 
-$router = new Router(); 
+$router = new Router();
 
 Router::get('/api/v1', 'HomeController@index');
 

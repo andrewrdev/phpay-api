@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 declare(strict_types=1);
 
@@ -9,18 +9,17 @@ use src\app\http\Response;
 use src\classes\database\DatabaseConnection;
 
 class HomeController
-{    
+{
 
     // ********************************************************************************************
     // ********************************************************************************************
 
     public function index(Request $request, Response $response)
-    {                  
-        if(DatabaseConnection::getConnection()) 
-        {
+    {
+        if (DatabaseConnection::getConnection()) {
             Response::json(["api_running" => true, "version" => '1.0', "statusCode" => 200]);
-        }     
-    }    
+        }
+    }
 
     // ********************************************************************************************
     // ********************************************************************************************
