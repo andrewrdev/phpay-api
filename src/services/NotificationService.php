@@ -15,9 +15,9 @@ class NotificationService
     // ********************************************************************************************
     public static function selectAll()
     {
-        $transactions = NotificationRepository::selectAll();
+        $notifications = NotificationRepository::selectAll();
 
-        return (!empty($transactions)) ? $transactions : Response::json(['message' => 'Notifications not found'], 404);
+        return (!empty($notifications)) ? $notifications : Response::json(['message' => 'Notifications not found'], 404);
     }
 
     // ********************************************************************************************
@@ -25,9 +25,9 @@ class NotificationService
 
     public static function selectById(int $id)
     {
-        $transaction = NotificationRepository::selectById($id);
+        $notification = NotificationRepository::selectById($id);
 
-        return (!empty($transaction)) ? $transaction : Response::json(['message' => 'Notification not found'], 404);
+        return (!empty($notification)) ? $notification : Response::json(['message' => 'Notification not found'], 404);
     }
 
     // ********************************************************************************************
@@ -37,9 +37,7 @@ class NotificationService
     {
         self::checkIfNotificationIsAuthorized();
 
-        if (NotificationRepository::insert($notification)) {
-            Response::json(['message' => 'Notification created successfully'], 201);
-        } else {
+        if (!NotificationRepository::insert($notification)) {
             Response::json(['message' => 'Notification could not be created'], 500);
         }
     }
@@ -93,10 +91,10 @@ class NotificationService
 
         if (!empty($response)) {
             if ($response['message'] !== true) {
-                Response::json(['message' => 'Notification not authorized'], 401);
+                Response::json(['message' => 'Notification not authorized'], 503);
             }
         } else {
-            Response::json(['message' => 'Notification not authorized'], 401);
+            Response::json(['message' => 'Notification not authorized'], 503);
         }
     }
 
