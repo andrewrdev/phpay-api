@@ -8,6 +8,7 @@ use src\app\http\Request;
 use src\app\http\Response;
 use src\models\UserModel;
 use src\services\UserService;
+use src\validations\UserValidation;
 
 class UserController
 {
@@ -48,6 +49,8 @@ class UserController
         $user->setPassword($request->getParam('password'));
         $user->setType($request->getParam('type'));
 
+        UserValidation::validate($user);
+
         UserService::insert($user);
     }
 
@@ -61,6 +64,8 @@ class UserController
         $user->setPassword($request->getParam('password'));
         $user->setId((int) $request->pathParam('id'));
 
+        UserValidation::validate($user);
+
         UserService::update($user);
     }
 
@@ -69,8 +74,12 @@ class UserController
 
     public function delete(Request $request, Response $response)
     {
-        $id = (int) $request->PathParam('id');
-        UserService::deleteById($id);
+        $user = new UserModel();
+        $user->setId((int) $request->pathParam('id'));   
+        
+        UserValidation::validateId($user);
+        
+        UserService::deleteById($user->getId());
     }
 
     // ********************************************************************************************

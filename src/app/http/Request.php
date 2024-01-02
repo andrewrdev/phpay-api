@@ -38,7 +38,11 @@ class Request
 
     public function getParam(string $param = '')
     {
-        return $this->requestParams[$param];
+        if (!isset($this->requestParams[$param])) {
+            Response::json(['message' => "{$param} is required"], 400);
+        }
+
+        return $this->requestParams[$param];            
     }
 
     // ********************************************************************************************
