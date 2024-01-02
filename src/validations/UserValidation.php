@@ -10,21 +10,10 @@ class UserValidation
 {
     public static function validate(object $user)
     {
-        self::validateId($user);
         self::validateName($user);
         self::validateEmail($user);
         self::validateCpfCnpj($user);
         self::validatetype($user);
-    }
-
-    public static function validateId(object $user)
-    {
-        if ($user->getId() !== null && !empty($user->getId())) {
-
-            if (!filter_var($user->getId(), FILTER_VALIDATE_INT)) {
-                Response::json(['message' => 'Id is invalid'], 400);
-            }
-        }
     }
 
     private static function validateName(object $user)
@@ -33,7 +22,6 @@ class UserValidation
             Response::json(['message' => 'Name is invalid'], 400);
         }
     }
-
 
     private static function validateEmail(object $user)
     {
