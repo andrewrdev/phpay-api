@@ -6,6 +6,7 @@ namespace src\services;
 
 use src\app\http\Response;
 use src\classes\api\ApiRequest;
+use src\models\NotificationModel;
 use src\repositories\TransactionRepository;
 
 class TransactionService
@@ -42,6 +43,11 @@ class TransactionService
         self::checkIfTransactionIsAuthorized();
 
         if (TransactionRepository::insert($transaction)) {
+            $notification = new NotificationModel();
+            $notification->setSenderId($transaction->getSenderId());
+            $notification->setReceiverId($transaction->getReceiverId());
+            $notification->setMessage("transferred $ {$transaction->getAmount()} to");
+            NotificationService::sendNotification($notification);
             Response::json(['message' => 'Transaction created successfully'], 201);
         } else {
             Response::json(['message' => 'Transaction could not be created'], 500);
@@ -140,10 +146,10 @@ class TransactionService
 
         if (!empty($response)) {
             if ($response['message'] !== 'Autorizado') {
-                Response::json(['message' => 'Transaction not authorized'], 401);
+                Response::json(['message' => 'Transaction not authorized'], 503);
             }
         } else {
-            Response::json(['message' => 'Transaction not authorized'], 401);
+            Response::json(['message' => 'Transaction not authorized'], 503);
         }
     }
 
