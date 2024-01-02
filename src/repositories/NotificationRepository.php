@@ -53,8 +53,8 @@ class NotificationRepository implements Repository
         try {
             $conn = DatabaseConnection::getConnection();
             $query = "SELECT 
-                notifications.id,                 
-                sender.full_name AS sender_name,                                  
+                notifications.id,                                
+                sender.full_name AS sender_name,                                                 
                 receiver.full_name AS receiver_name,                                  
                 notifications.message,
                 notifications.date
