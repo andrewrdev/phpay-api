@@ -22,7 +22,6 @@ Router::post('  /api/v1/users/deposit', 'UserController@deposit');
 Router::get('   /api/v1/transactions',       'TransactionController@selectAll');
 Router::get('   /api/v1/transactions/{id}',  'TransactionController@selectOne');
 Router::post('  /api/v1/transactions',       'TransactionController@insert');
-Router::put('   /api/v1/transactions/{id}',  'TransactionController@update');
 Router::delete('/api/v1/transactions/{id}',  'TransactionController@delete');
 
 // ********************************************************************************************
@@ -30,6 +29,4 @@ Router::delete('/api/v1/transactions/{id}',  'TransactionController@delete');
 
 Router::get('   /api/v1/notifications',                'NotificationController@selectAll');
 Router::get('   /api/v1/notifications/{id}',           'NotificationController@selectOne');
-Router::get('   /api/v1/notifications/sender/{id}',    'NotificationController@selectBySender');
-Router::get('   /api/v1/notifications/receiver/{id}',  'NotificationController@selectByReceiver');
 Router::delete('/api/v1/notifications/{id}',           'NotificationController@delete');
