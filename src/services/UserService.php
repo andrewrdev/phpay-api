@@ -109,12 +109,12 @@ class UserService
     // ********************************************************************************************
     // ********************************************************************************************
 
-    public static function checkIfUserExists(int $id): void
+    public static function checkIfUserExists(int $id, string $message = 'User not found'): void
     {
         $user = UserRepository::selectById($id);
 
         if (empty($user)) {
-            Response::json(['message' => 'User not found'], 404);
+            Response::json(['message' => $message], 404);
         }
     }
 
