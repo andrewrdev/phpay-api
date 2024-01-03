@@ -7,6 +7,7 @@ namespace src\controllers;
 use src\app\http\Request;
 use src\app\http\Response;
 use src\services\NotificationService;
+use src\validations\Validation;
 
 class NotificationController
 {
@@ -29,7 +30,10 @@ class NotificationController
     public function selectOne(Request $request, Response $response)
     {
         $id = (int) $request->PathParam('id');
+
+        Validation::validateId($id);
         $notifications = NotificationService::selectById($id);
+        
         $response->json($notifications);
     }
 
@@ -39,6 +43,8 @@ class NotificationController
     public function delete(Request $request, Response $response)
     {
         $id = (int) $request->PathParam('id');
+
+        Validation::validateId($id);
         NotificationService::deleteById($id);
     }
 
