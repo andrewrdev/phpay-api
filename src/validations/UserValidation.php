@@ -10,40 +10,53 @@ class UserValidation
 {
     public static function validate(object $user)
     {
-        self::validateName($user);
-        self::validateEmail($user);
-        self::validateCpfCnpj($user);
-        self::validatetype($user);
+        Validation::validateID($user->getId());
+        self::validateFullName($user->getFullName());
+        self::validateEmail($user->getEmail());
+        self::validateCpfCnpj($user->getCpfCnpj());
+        self::validatetype($user->getType());
     }
 
-    private static function validateName(object $user)
+    public static function validateFullName(string|null $fullName)
     {
-        if (!preg_match("/^[a-zA-Z ]+$/", $user->getFullName())) {
-            Response::json(['message' => 'Name is invalid'], 400);
+        if ($fullName !== null) {
+            if (!preg_match("/^[a-zA-Z ]+$/", $fullName)) {
+                Response::json(['message' => 'full_name is invalid'], 400);
+            }
+
+            if (mb_strlen($fullName) < 3) {
+                Response::json(['message' => 'full_name is too short'], 400);
+            }
         }
     }
 
-    private static function validateEmail(object $user)
+    public static function validateEmail(string|null $email)
     {
-        if (!filter_var($user->getEmail(), FILTER_VALIDATE_EMAIL)) {
-            Response::json(['message' => 'Email is invalid'], 400);
+        if ($email !== null) {
+            if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                Response::json(['message' => 'email is invalid'], 400);
+            }
         }
     }
 
-    private static function validateCpfCnpj(object $user)
+    public static function validateCpfCnpj(string|null $cpfCnpj)
     {
-        $cpfRegex = "/^\d{3}\.\d{3}\.\d{3}-\d{2}$/";
-        $cnpjRegex = "/^\d{2}\.\d{3}\.\d{3}\/\d{4}-\d{2}$/";
+        if ($cpfCnpj !== null) {
+            $cpfRegex = "/^\d{3}\.\d{3}\.\d{3}-\d{2}$/";
+            $cnpjRegex = "/^\d{2}\.\d{3}\.\d{3}\/\d{4}-\d{2}$/";
 
-        if (!preg_match($cpfRegex, $user->getCpfCnpj()) && !preg_match($cnpjRegex, $user->getCpfCnpj())) {
-            Response::json(['message' => 'cpf_cnpj is invalid'], 400);
+            if (!preg_match($cpfRegex, $cpfCnpj) && !preg_match($cnpjRegex, $cpfCnpj)) {
+                Response::json(['message' => 'cpf_cnpj is invalid'], 400);
+            }
         }
     }
 
-    private static function validatetype(object $user)
+    public static function validatetype(string|null $type)
     {
-        if (!in_array($user->getType(), ['common', 'retailer'])) {
-            Response::json(['message' => 'Type is invalid, only common or retailer are allowed'], 400);
+        if ($type !== null) {
+            if (!in_array($type, ['common', 'retailer'])) {
+                Response::json(['message' => 'type is invalid, only common or retailer are allowed'], 400);
+            }
         }
     }
 }
