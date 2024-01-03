@@ -8,10 +8,12 @@ use src\app\http\Response;
 
 class Validation
 {
-    public static function validateId(int $id)
+    public static function validateID(int|null $id, string $message = 'id is invalid')
     {
-        if (!is_numeric($id) && $id <= 0 && is_int($id)) {
-            Response::json(['message' => 'Id is invalid'], 400);
+        if ($id !== null) {
+            if (!filter_var($id, FILTER_VALIDATE_INT) || $id < 1) {
+                Response::json(['message' => $message], 400);
+            }
         }
-    }    
+    }
 }
