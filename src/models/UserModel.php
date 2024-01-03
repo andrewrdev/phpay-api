@@ -7,15 +7,26 @@ namespace src\models;
 class UserModel
 {
 
-    private int $id;
-    private string $fullName;
-    private string $cpf_cnpj;
-    private string $email;
-    private string $password;
-    private float $balance;
-    private string $type;
+    private int|null $id;
+    private string|null $fullName;
+    private string|null $cpf_cnpj;
+    private string|null $email;
+    private string|null $password;
+    private float|null $balance;
+    private string|null $type;
 
-    public function getId(): int
+    public function __construct()
+    {
+        $this->id = null;
+        $this->fullName = null;
+        $this->cpf_cnpj = null;
+        $this->email = null;
+        $this->password = null;
+        $this->balance = null;
+        $this->type = null;
+    }
+
+    public function getId(): int|null
     {
         return $this->id;
     }
@@ -25,27 +36,27 @@ class UserModel
         $this->id = $id;
     }
 
-    public function getFullName(): string
+    public function getFullName(): string|null
     {
         return $this->fullName;
     }
 
     public function setFullName(string $fullName): void
     {
-        $this->fullName = $fullName;
+        $this->fullName = ucwords($fullName);
     }
 
-    public function getCpfCnpj(): string
+    public function getCpfCnpj(): string|null
     {
         return $this->cpf_cnpj;
     }
 
-    public function setCpfCnpj(string $cpf_cnpj)
+    public function setCpfCnpj(string $cpf_cnpj): void
     {
         $this->cpf_cnpj = $cpf_cnpj;
     }
 
-    public function getEmail(): string
+    public function getEmail(): string|null
     {
         return $this->email;
     }
@@ -55,7 +66,7 @@ class UserModel
         $this->email = $email;
     }
 
-    public function getPassword(): string
+    public function getPassword(): string|null
     {
         return $this->password;
     }
@@ -65,7 +76,7 @@ class UserModel
         $this->password = password_hash($password, PASSWORD_DEFAULT);
     }
 
-    public function getBalance(): float
+    public function getBalance(): float|null
     {
         return $this->balance;
     }
@@ -75,13 +86,13 @@ class UserModel
         $this->balance = $balance;
     }
 
-    public function getType(): string
+    public function getType(): string|null
     {
         return $this->type;
     }
 
     public function setType(string $type): void
     {
-        $this->type = $type;
+        $this->type = strtolower($type);
     }
 }
