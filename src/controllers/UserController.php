@@ -8,7 +8,9 @@ use src\app\http\Request;
 use src\app\http\Response;
 use src\models\UserModel;
 use src\services\UserService;
+use src\validations\TransactionValidation;
 use src\validations\UserValidation;
+use src\validations\Validation;
 
 class UserController
 {
@@ -29,9 +31,12 @@ class UserController
     // ********************************************************************************************
 
     public function selectOne(Request $request, Response $response)
-    {
-        $id = (int) $request->pathParam('id');
+    {        
+        $id = (int) $request->PathParam('id');        
+
+        Validation::validateID($id, 'user_id is invalid');
         $users = UserService::selectById($id);
+
         if (!empty($users)) {
             $response->json($users);
         }
@@ -43,14 +48,13 @@ class UserController
     public function insert(Request $request, Response $response)
     {
         $user = new UserModel();
-        $user->setFullName($request->getParam('full_name'));
-        $user->setCpfCnpj($request->getParam('cpf_cnpj'));
-        $user->setEmail($request->getParam('email'));
-        $user->setPassword($request->getParam('password'));
-        $user->setType($request->getParam('type'));
+        $user->setFullName((string) $request->getParam('full_name'));
+        $user->setCpfCnpj((string) $request->getParam('cpf_cnpj'));
+        $user->setEmail((string) $request->getParam('email'));
+        $user->setPassword((string) $request->getParam('password'));
+        $user->setType((string) $request->getParam('type'));
 
-        UserValidation::validate($user);
-
+        UserValidation::validate($user);  
         UserService::insert($user);
     }
 
@@ -60,12 +64,11 @@ class UserController
     public function update(Request $request, Response $response)
     {
         $user = new UserModel();
-        $user->setFullName($request->getParam('full_name'));
-        $user->setPassword($request->getParam('password'));
         $user->setId((int) $request->pathParam('id'));
+        $user->setFullName((string) $request->getParam('full_name'));
+        $user->setPassword((string) $request->getParam('password'));
 
-        UserValidation::validate($user);
-
+        UserValidation::validate($user);  
         UserService::update($user);
     }
 
@@ -74,12 +77,10 @@ class UserController
 
     public function delete(Request $request, Response $response)
     {
-        $user = new UserModel();
-        $user->setId((int) $request->pathParam('id'));   
-        
-        UserValidation::validateId($user);
-        
-        UserService::deleteById($user->getId());
+        $id = (int) $request->PathParam('id');        
+
+        Validation::validateID($id, 'user_id is invalid');
+        UserService::deleteById($id);
     }
 
     // ********************************************************************************************
@@ -89,6 +90,9 @@ class UserController
     {
         $user_id = (int) $request->getParam('user_id');
         $amount = (float) $request->getParam('amount');
+
+        Validation::validateID($user_id);
+        TransactionValidation::validateAmount($amount);
 
         UserService::deposit($user_id, $amount);
     }
