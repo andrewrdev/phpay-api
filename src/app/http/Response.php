@@ -6,9 +6,16 @@ namespace src\app\http;
 
 class Response
 {
-    // ********************************************************************************************
-    // ********************************************************************************************
 
+    /* ************************************************************************
+     *  
+     * Generates a JSON response with the given message and status code.
+     *
+     * @param array $message The message to be included in the response.
+     * @param int $statusCode The status code of the response. Default is 200.
+     * 
+     * ***********************************************************************/
+    
     public static function json(array $message = [], int $statusCode = 200): void
     {
         if (!empty($message)) {
@@ -50,7 +57,4 @@ class Response
             exit;
         }
     }
-
-    // ********************************************************************************************
-    // ********************************************************************************************
 }
