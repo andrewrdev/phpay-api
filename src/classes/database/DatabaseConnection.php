@@ -11,8 +11,14 @@ use src\classes\util\ApplicationProperties;
 
 class DatabaseConnection
 {
-    // ********************************************************************************************
-    // ********************************************************************************************
+
+    /**************************************************************************
+     * Retrieves a database connection.
+     *
+     * @throws PDOException If there is an error connecting to the database.
+     * @return PDO The database connection.
+     *************************************************************************/
+
     public static function getConnection()
     {
         try {
@@ -30,6 +36,4 @@ class DatabaseConnection
             Response::json(["error" => $e->getMessage()], 500);
         }
     }
-    // ********************************************************************************************
-    // ********************************************************************************************
 }
