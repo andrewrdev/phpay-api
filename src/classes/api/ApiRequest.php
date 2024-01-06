@@ -9,6 +9,14 @@ use Exception;
 
 class ApiRequest
 {
+    /**************************************************************************
+     * Retrieves data from the specified URL using a GET request.
+     *
+     * @param string $url The URL to send the GET request to.
+     * @throws Exception If an error occurs during the API request.
+     * @return array|null The response data as an associative array, 
+     * or null if an error occurred.
+     *************************************************************************/
 
     public static function get(string $url = '')
     {
