@@ -7,10 +7,10 @@ namespace src\models;
 class TransactionModel
 {
 
-    private int|null $id;
-    private int|null $senderId;
-    private int|null $receiverId;
-    private float|null $amount;
+    private ?int $id;
+    private ?int $senderId;
+    private ?int $receiverId;
+    private ?float $amount;
 
     public function __construct()
     {
@@ -20,7 +20,7 @@ class TransactionModel
         $this->amount = null;
     }
 
-    public function getId(): int|null
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -30,7 +30,7 @@ class TransactionModel
         $this->id = $id;
     }
 
-    public function getSenderId(): int|null
+    public function getSenderId(): ?int
     {
         return $this->senderId;
     }
@@ -40,7 +40,7 @@ class TransactionModel
         $this->senderId = $senderId;
     }
 
-    public function getReceiverId(): int|null
+    public function getReceiverId(): ?int
     {
         return $this->receiverId;
     }
@@ -50,7 +50,7 @@ class TransactionModel
         $this->receiverId = $receiverId;
     }
 
-    public function getAmount(): float|null
+    public function getAmount(): ?float
     {
         return $this->amount;
     }
