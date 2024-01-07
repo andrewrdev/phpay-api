@@ -10,9 +10,12 @@ use src\classes\database\DatabaseConnection;
 
 class HomeController
 {
-
-    // ********************************************************************************************
-    // ********************************************************************************************
+    /**************************************************************************
+     * Index function to handle the request and response.
+     *
+     * @param Request $request The request object.
+     * @param Response $response The response object.     
+     *************************************************************************/
 
     public function index(Request $request, Response $response)
     {
@@ -20,7 +23,4 @@ class HomeController
             Response::json(["api_running" => true, "version" => '1.0', "statusCode" => 200]);
         }
     }
-
-    // ********************************************************************************************
-    // ********************************************************************************************
 }
