@@ -7,11 +7,11 @@ namespace src\models;
 class NotificationModel
 {
 
-    private int|null $id;
-    private int|null $senderId;
-    private int|null $receiverId;
-    private string|null $message;
-    private string|null $date;
+    private ?int $id;
+    private ?int $senderId;
+    private ?int $receiverId;
+    private ?string $message;
+    private ?string $date;
 
     public function __construct()
     {
@@ -22,7 +22,7 @@ class NotificationModel
         $this->date = null;
     }
 
-    public function getId(): int|null
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -32,7 +32,7 @@ class NotificationModel
         $this->id = $id;
     }
 
-    public function getSenderId(): int|null
+    public function getSenderId(): ?int
     {
         return $this->senderId;
     }
@@ -42,7 +42,7 @@ class NotificationModel
         $this->senderId = $senderId;
     }
 
-    public function getReceiverId(): int|null
+    public function getReceiverId(): ?int
     {
         return $this->receiverId;
     }
@@ -52,7 +52,7 @@ class NotificationModel
         $this->receiverId = $receiverId;
     }
 
-    public function getMessage(): string|null
+    public function getMessage(): ?string
     {
         return $this->message;
     }
@@ -62,7 +62,7 @@ class NotificationModel
         $this->message = $message;
     }
 
-    public function getDate(): string|null
+    public function getDate(): ?string
     {
         return $this->date;
     }
