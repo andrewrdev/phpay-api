@@ -13,9 +13,12 @@ use src\validations\Validation;
 
 class TransactionController
 {
-
-    // ********************************************************************************************
-    // ********************************************************************************************
+    /**************************************************************************
+     * Retrieves all transactions using the TransactionService.
+     *
+     * @param Request $request The HTTP request object.
+     * @param Response $response The HTTP response object.
+     *************************************************************************/
 
     public function selectAll(Request $request, Response $response)
     {
@@ -26,8 +29,12 @@ class TransactionController
         }
     }
 
-    // ********************************************************************************************
-    // ********************************************************************************************
+    /**************************************************************************
+     * Selects one transaction by ID.
+     *
+     * @param Request $request the request object
+     * @param Response $response the response object
+     *************************************************************************/
 
     public function selectOne(Request $request, Response $response)
     {
@@ -39,38 +46,55 @@ class TransactionController
         $response->json($transaction);
     }
 
-    // ********************************************************************************************
-    // ********************************************************************************************
+    /**************************************************************************
+     * Inserts a new transaction into the database.
+     *
+     * @param Request $request The HTTP request object.
+     * @param Response $response The HTTP response object.     
+     * @return void
+     *************************************************************************/
 
-    public function insert(Request $request, Response $response)
+    public function insert(Request $request, Response $response): void
     {
         $transaction = new TransactionModel();
         $transaction->setSenderId((int) $request->getParam('sender_id'));
         $transaction->setReceiverId((int) $request->getParam('receiver_id'));
         $transaction->setAmount((float) $request->getParam('amount'));
 
-        TransactionValidation::validate($transaction);        
+        TransactionValidation::validate($transaction);
         TransactionService::insert($transaction);
     }
 
-    // ********************************************************************************************
-    // ********************************************************************************************
+    /**************************************************************************
+     * Updates the data using the given request and response objects.
+     *
+     * @param Request  $request  the request object containing the data 
+     * to update
+     * 
+     * @param Response $response the response object to send back after 
+     * updating the data     
+     * 
+     * @return void
+     *************************************************************************/
 
-    public function update(Request $request, Response $response)
+    public function update(Request $request, Response $response): void
     {
     }
 
-    // ********************************************************************************************
-    // ********************************************************************************************
 
-    public function delete(Request $request, Response $response)
+    /**************************************************************************
+     * Deletes a transaction by ID.
+     *
+     * @param Request $request The HTTP request object.
+     * @param Response $response The HTTP response object. 
+     * @return void
+     *************************************************************************/
+
+    public function delete(Request $request, Response $response): void
     {
         $id = (int) $request->PathParam('id');
 
         Validation::validateID($id);
         TransactionService::deleteById($id);
     }
-
-    // ********************************************************************************************
-    // ********************************************************************************************    
 }
