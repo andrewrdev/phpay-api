@@ -7,13 +7,13 @@ namespace src\models;
 class UserModel
 {
 
-    private int|null $id;
-    private string|null $fullName;
-    private string|null $cpf_cnpj;
-    private string|null $email;
-    private string|null $password;
-    private float|null $balance;
-    private string|null $type;
+    private ?int $id;
+    private ?string $fullName;
+    private ?string $cpf_cnpj;
+    private ?string $email;
+    private ?string $password;
+    private ?float $balance;
+    private ?string $type;
 
     public function __construct()
     {
@@ -26,7 +26,7 @@ class UserModel
         $this->type = null;
     }
 
-    public function getId(): int|null
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -36,7 +36,7 @@ class UserModel
         $this->id = $id;
     }
 
-    public function getFullName(): string|null
+    public function getFullName(): ?string
     {
         return $this->fullName;
     }
@@ -46,7 +46,7 @@ class UserModel
         $this->fullName = ucwords($fullName);
     }
 
-    public function getCpfCnpj(): string|null
+    public function getCpfCnpj(): ?string
     {
         return $this->cpf_cnpj;
     }
@@ -56,7 +56,7 @@ class UserModel
         $this->cpf_cnpj = $cpf_cnpj;
     }
 
-    public function getEmail(): string|null
+    public function getEmail(): ?string
     {
         return $this->email;
     }
@@ -66,7 +66,7 @@ class UserModel
         $this->email = $email;
     }
 
-    public function getPassword(): string|null
+    public function getPassword(): ?string
     {
         return $this->password;
     }
@@ -76,7 +76,7 @@ class UserModel
         $this->password = password_hash($password, PASSWORD_DEFAULT);
     }
 
-    public function getBalance(): float|null
+    public function getBalance(): ?float
     {
         return $this->balance;
     }
@@ -86,7 +86,7 @@ class UserModel
         $this->balance = $balance;
     }
 
-    public function getType(): string|null
+    public function getType(): ?string
     {
         return $this->type;
     }
