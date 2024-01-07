@@ -11,9 +11,12 @@ use src\validations\Validation;
 
 class NotificationController
 {
-
-    // ********************************************************************************************
-    // ********************************************************************************************
+    /**************************************************************************
+     * Selects all notifications.
+     *
+     * @param Request $request The request object.
+     * @param Response $response The response object.
+     *************************************************************************/
 
     public function selectAll(Request $request, Response $response)
     {
@@ -24,8 +27,12 @@ class NotificationController
         }
     }
 
-    // ********************************************************************************************
-    // ********************************************************************************************
+    /**************************************************************************
+     * Retrieves a single notification by its ID.
+     *
+     * @param Request $request The HTTP request object.
+     * @param Response $response The HTTP response object.     
+     *************************************************************************/
 
     public function selectOne(Request $request, Response $response)
     {
@@ -33,12 +40,16 @@ class NotificationController
 
         Validation::validateId($id);
         $notifications = NotificationService::selectById($id);
-        
+
         $response->json($notifications);
     }
 
-    // ********************************************************************************************
-    // ******************************************************************************************** 
+    /**************************************************************************
+     * Deletes a notification by ID.
+     *
+     * @param Request $request The request object.
+     * @param Response $response The response object.     
+     *************************************************************************/
 
     public function delete(Request $request, Response $response)
     {
@@ -47,7 +58,4 @@ class NotificationController
         Validation::validateId($id);
         NotificationService::deleteById($id);
     }
-
-    // ********************************************************************************************
-    // ********************************************************************************************    
 }
