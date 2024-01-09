@@ -12,8 +12,13 @@ use Exception;
 
 class TransactionRepository implements Repository
 {
-    // ********************************************************************************************
-    // ********************************************************************************************
+    /**************************************************************************
+     * Retrieves all transactions from the database.
+     *
+     * @throws Exception when there is an error executing the query
+     * @return array An array of transactions     
+     *************************************************************************/
+
     public static function selectAll()
     {
         $conn = null;
@@ -46,8 +51,15 @@ class TransactionRepository implements Repository
         }
     }
 
-    // ********************************************************************************************
-    // ********************************************************************************************
+
+    /**************************************************************************
+     * Retrieves a transaction by its ID from the database.
+     *
+     * @param int $id The ID of the transaction to retrieve.
+     * @throws Exception If there is an error retrieving the transaction.
+     * @return bool True if the transaction was retrieved successfully, 
+     * false otherwise.
+     *************************************************************************/
 
     public static function selectById(int $id)
     {
@@ -80,8 +92,13 @@ class TransactionRepository implements Repository
         }
     }
 
-    // ********************************************************************************************
-    // ********************************************************************************************
+    /**************************************************************************
+     * Inserts a new transaction in the database.
+     * 
+     * @param object $transaction The transaction to insert.
+     * @throws Exception when there is an error executing the query
+     * @return boolean True if the transaction was inserted successfully     
+     *************************************************************************/
 
     public static function insert(object $transaction)
     {
@@ -129,8 +146,13 @@ class TransactionRepository implements Repository
         }
     }
 
-    // ********************************************************************************************
-    // ********************************************************************************************
+    /**************************************************************************
+     * Updates a transaction in the database.
+     * 
+     * @throws Exception when there is an error executing the query
+     * @param object $transaction The transaction to update.
+     * @return boolean True if the transaction was updated successfully     
+     *************************************************************************/
 
     public static function update(object $transaction)
     {
@@ -161,8 +183,13 @@ class TransactionRepository implements Repository
         }
     }
 
-    // ********************************************************************************************
-    // ********************************************************************************************
+    /**************************************************************************
+     * Deletes a transaction from the database.
+     * 
+     * @throws Exception when there is an error executing the query
+     * @param int $id The ID of the transaction to delete.
+     * @return boolean True if the transaction was deleted successfully     
+     *************************************************************************/
 
     public static function deleteById(int $id)
     {
@@ -179,13 +206,10 @@ class TransactionRepository implements Repository
             if ($conn !== null) {
                 $conn->rollBack();
             }
-            
+
             Response::json(['message' => $e->getMessage()], 500);
         } finally {
             $conn = null;
         }
     }
-
-    // ********************************************************************************************
-    // ********************************************************************************************    
 }
