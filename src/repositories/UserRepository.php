@@ -12,8 +12,13 @@ use PDO;
 
 class UserRepository implements Repository
 {
-    // ********************************************************************************************
-    // ********************************************************************************************
+    /**************************************************************************
+     * Selects all rows from the "users" table.
+     *
+     * @throws Exception If there is an error executing the query.
+     * @return array An array of associative arrays representing the selected rows.
+     *************************************************************************/
+
     public static function selectAll()
     {
         $conn = null;
@@ -33,8 +38,13 @@ class UserRepository implements Repository
         }
     }
 
-    // ********************************************************************************************
-    // ********************************************************************************************
+    /**************************************************************************
+     * Retrieves the balance of a user by their user ID.
+     *
+     * @param int $userId The ID of the user.
+     * @throws Exception If there is an error retrieving the balance.
+     * @return array|null The balance of the user, or null if the user does not exist.
+     *************************************************************************/
 
     public static function selectBalance(int $userId)
     {
@@ -55,8 +65,13 @@ class UserRepository implements Repository
         }
     }
 
-    // ********************************************************************************************
-    // ********************************************************************************************
+    /**************************************************************************
+     * Selects one row from the "users" table.
+     * 
+     * @param int $id The ID of the user to select.
+     * @throws Exception If there is an error executing the query.
+     * @return array An associative array representing the selected row.
+     *************************************************************************/
 
     public static function selectById(int $id)
     {
@@ -77,8 +92,13 @@ class UserRepository implements Repository
         }
     }
 
-    // ********************************************************************************************
-    // ********************************************************************************************
+    /**************************************************************************
+     * Selects one row from the "users" table by email.
+     * 
+     * @param string $email The email of the user to select.
+     * @throws Exception If there is an error executing the query.
+     * @return array An associative array representing the selected row.
+     *************************************************************************/
 
     public static function selectByEmail(string $email)
     {
@@ -99,9 +119,13 @@ class UserRepository implements Repository
         }
     }
 
-    // ********************************************************************************************
-    // ********************************************************************************************
-
+    /**************************************************************************
+     * Selects one row from the "users" table by cpf_cnpj.
+     * 
+     * @param string $cpf_cnpj The cpf_cnpj of the user to select.
+     * @throws Exception If there is an error executing the query.
+     * @return array An associative array representing the selected row.
+     *************************************************************************/
     public static function selectByCpfCnpj(string $cpf_cnpj)
     {
         $conn = null;
@@ -121,8 +145,13 @@ class UserRepository implements Repository
         }
     }
 
-    // ********************************************************************************************
-    // ********************************************************************************************   
+    /**************************************************************************
+     * Inserts a user object into the database.
+     *
+     * @param object $user The user object to insert.
+     * @throws Exception If an error occurs during the database transaction.
+     * @return bool True if the user was inserted successfully, false otherwise.
+     *************************************************************************/
 
     public static function insert(object $user)
     {
@@ -154,8 +183,13 @@ class UserRepository implements Repository
         }
     }
 
-    // ********************************************************************************************
-    // ********************************************************************************************
+    /**************************************************************************
+     * Updates a user in the database.
+     *
+     * @param object $user The user object to be updated.
+     * @throws Exception If an error occurs during the update process.
+     * @return bool True if the user was updated successfully, false otherwise.
+     *************************************************************************/
 
     public static function update(object $user)
     {
@@ -184,8 +218,13 @@ class UserRepository implements Repository
         }
     }
 
-    // ********************************************************************************************
-    // ********************************************************************************************
+    /**************************************************************************
+     * Deletes a record from the database by its ID.
+     *
+     * @param int $id The ID of the record to be deleted.
+     * @throws Exception If an error occurs during the deletion process.
+     * @return bool True if the record was deleted successfully, false otherwise.
+     *************************************************************************/
 
     public static function deleteById(int $id)
     {
@@ -208,8 +247,14 @@ class UserRepository implements Repository
         }
     }
 
-    // ********************************************************************************************
-    // ********************************************************************************************
+    /**************************************************************************
+     * Updates the balance of a user.
+     *
+     * @param int $userId The ID of the user.
+     * @param float $amount The amount to update the balance by.
+     * @throws Exception If an error occurs during the update.
+     * @return bool True if the balance was updated successfully, false otherwise.
+     *************************************************************************/
 
     public static function updateBalance(int $userId, float $amount)
     {
@@ -231,6 +276,4 @@ class UserRepository implements Repository
             $conn = null;
         }
     }
-    // ********************************************************************************************
-    // ********************************************************************************************    
 }
