@@ -12,8 +12,15 @@ use Exception;
 
 class NotificationRepository implements Repository
 {
-    // ********************************************************************************************
-    // ********************************************************************************************
+
+    /**************************************************************************
+     * Selects all notifications from the database.
+     *
+     * @throws Exception if there is an error executing the query
+     * @return array|null an array of associative arrays representing 
+     * the notifications, or null if there are no notifications
+     *************************************************************************/
+
     public static function selectAll()
     {
         $conn = null;
@@ -44,8 +51,14 @@ class NotificationRepository implements Repository
         }
     }
 
-    // ********************************************************************************************
-    // ********************************************************************************************
+    /**************************************************************************
+     * Retrieves a notification by its ID from the database.
+     *
+     * @param int $id The ID of the notification to retrieve.
+     * @throws Exception If an error occurs while retrieving the notification.
+     * @return array|null The retrieved notification as an associative array, 
+     * or null if no notification is found.
+     *************************************************************************/
 
     public static function selectById(int $id)
     {
@@ -76,8 +89,13 @@ class NotificationRepository implements Repository
         }
     }
 
-    // ********************************************************************************************
-    // ********************************************************************************************
+    /**************************************************************************
+     * Inserts a notification into the database.
+     *
+     * @param object $notification The notification object to be inserted.
+     * @throws Exception If an error occurs during the insertion process.
+     * @return bool true if the insertion is successful, otherwise false.
+     *************************************************************************/
 
     public static function insert(object $notification)
     {
@@ -95,7 +113,7 @@ class NotificationRepository implements Repository
                 $notification->getSenderId(),
                 $notification->getReceiverId(),
                 $notification->getMessage()
-            ));           
+            ));
 
             $conn->commit();
 
@@ -111,16 +129,25 @@ class NotificationRepository implements Repository
         }
     }
 
-    // ********************************************************************************************
-    // ********************************************************************************************   
+    /**************************************************************************
+     * Updates the given notification.
+     *
+     * @param object $notification The notification to update.
+     * @return null
+     *************************************************************************/
 
     public static function update(object $notification)
     {
-        return null;        
+        return null;
     }
 
-    // ********************************************************************************************
-    // ********************************************************************************************   
+    /**************************************************************************
+     * Deletes a record from the notifications table by its ID.
+     *
+     * @param int $id The ID of the record to be deleted.
+     * @throws Exception If an error occurs while deleting the record.
+     * @return bool true if the deletion is successful, otherwise false.
+     *************************************************************************/
 
     public static function deleteById(int $id)
     {
@@ -137,13 +164,10 @@ class NotificationRepository implements Repository
             if ($conn !== null) {
                 $conn->rollBack();
             }
-            
+
             Response::json(['message' => $e->getMessage()], 500);
         } finally {
             $conn = null;
         }
     }
-
-    // ********************************************************************************************
-    // ********************************************************************************************    
 }
