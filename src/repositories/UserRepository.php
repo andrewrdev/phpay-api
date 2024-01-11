@@ -126,6 +126,7 @@ class UserRepository implements Repository
      * @throws Exception If there is an error executing the query.
      * @return array An associative array representing the selected row.
      *************************************************************************/
+    
     public static function selectByCpfCnpj(string $cpf_cnpj)
     {
         $conn = null;
