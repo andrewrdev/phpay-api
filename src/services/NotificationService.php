@@ -10,9 +10,12 @@ use src\repositories\NotificationRepository;
 
 class NotificationService
 {
+    /**************************************************************************
+     * Select all notifications.
+     *
+     * @return mixed
+     *************************************************************************/
 
-    // ********************************************************************************************
-    // ********************************************************************************************
     public static function selectAll()
     {
         $notifications = NotificationRepository::selectAll();
@@ -20,8 +23,13 @@ class NotificationService
         return (!empty($notifications)) ? $notifications : Response::json(['message' => 'Notifications not found'], 404);
     }
 
-    // ********************************************************************************************
-    // ********************************************************************************************
+    /**************************************************************************
+     * Select a notification by its ID.
+     *
+     * @param int $id The ID of the notification.
+     * @return mixed The selected notification or a JSON response with 
+     * a 'Notification not found' message and a 404 status code.
+     *************************************************************************/
 
     public static function selectById(int $id)
     {
@@ -30,8 +38,12 @@ class NotificationService
         return (!empty($notification)) ? $notification : Response::json(['message' => 'Notification not found'], 404);
     }
 
-    // ********************************************************************************************
-    // ********************************************************************************************
+    /**************************************************************************
+     * Sends a notification.
+     *
+     * @param object $notification The notification object to be sent.     
+     * @return void
+     *************************************************************************/
 
     public static function sendNotification(object $notification)
     {
@@ -42,8 +54,12 @@ class NotificationService
         }
     }
 
-    // ********************************************************************************************
-    // ********************************************************************************************
+    /**************************************************************************
+     * Update a notification.
+     *
+     * @param object $notification The notification object to update.     
+     * @return void
+     *************************************************************************/
 
     public static function update(object $notification)
     {
@@ -56,8 +72,12 @@ class NotificationService
         }
     }
 
-    // ********************************************************************************************
-    // ********************************************************************************************
+    /**************************************************************************
+     * Deletes a notification by its ID.
+     *
+     * @param int $id The ID of the notification to be deleted.     
+     * @return void
+     *************************************************************************/
 
     public static function deleteById(int $id)
     {
@@ -70,8 +90,12 @@ class NotificationService
         }
     }
 
-    // ********************************************************************************************
-    // ******************************************************************************************** 
+    /**************************************************************************
+     * Checks if a notification exists.
+     *
+     * @param int $id The ID of the notification.     
+     * @return void
+     *************************************************************************/
 
     private static function checkIfNotificationExists(int $id): void
     {
@@ -82,8 +106,11 @@ class NotificationService
         }
     }
 
-    // ********************************************************************************************
-    // ********************************************************************************************
+    /**************************************************************************
+     * Checks if the notification is authorized.
+     *     
+     * @return void
+     *************************************************************************/
 
     private static function checkIfNotificationIsAuthorized(): void
     {
@@ -97,7 +124,4 @@ class NotificationService
             Response::json(['message' => 'Notification not authorized'], 503);
         }
     }
-
-    // ********************************************************************************************
-    // ********************************************************************************************    
 }
