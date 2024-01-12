@@ -19,6 +19,37 @@ Bem-vindo ao PHPlay API, uma solução em PHP para facilitar transferências de 
    - Endpoint: `POST /api/v1/transactions`
    - Facilita a transferência de dinheiro entre usuários e lojistas. Valida o saldo do usuário antes da transferência e utiliza um serviço externo para autorização.
 
+## Como Utilizar 🚦
+
+Para utilizar o PHPlay API, basta seguir os seguintes passos:
+
+1. Clone este repositório:
+   ```bash
+   git clone https://github.com/andrewrdev/phpay-api.git
+   ```
+
+2. Navegue até o diretório do projeto:
+   ```bash
+   cd phpay-api
+   ```
+
+3. Configure o ambiente com o xampp, laragon, docker ..., defina a pasta public como Document Root: 
+   ```bash
+   DocumentRoot "C:/laragon/www/phpay-api/public"
+   ```  
+
+4. Execute no seu mysql o script do database.sql na pasta src, irá criar o banco de dados e as tabelas necessárias.
+
+5. Configure o application.properties na pasta src:
+    ```bash
+    DATABASE_HOST='localhost'
+    DATABASE_NAME='api_phpay'
+    DATABASE_USER='root'
+    DATABASE_PASSWORD=''
+    ```
+
+6. Acesse os endpoints do sistema via navegador ou utilize ferramentas como [Postman](https://www.postman.com/)
+
 ## Endpoints 📚
 
    Listagem de Usuários:
@@ -85,35 +116,6 @@ Bem-vindo ao PHPlay API, uma solução em PHP para facilitar transferências de 
    ```bash
       DELETE /api/v1/notifications/{id}
    ```
-
-## Como Utilizar 🚦
-
-Para utilizar o PHPlay API, basta seguir os seguintes passos:
-
-1. Clone este repositório:
-   ```bash
-   git clone https://github.com/andrewrdev/phpay-api.git
-   ```
-
-2. Navegue até o diretório do projeto:
-   ```bash
-   cd phpay-api
-   ```
-
-3. Configure o ambiente com o xampp, laragon, docker ..., defina a pasta public como Document Root: 
-   ```bash
-   DocumentRoot "C:/laragon/www/phpay-api/public"
-   ```  
-
-4. Configure o application.properties na pasta src:
-    ```bash
-    DATABASE_HOST='localhost'
-    DATABASE_NAME='api_phpay'
-    DATABASE_USER='root'
-    DATABASE_PASSWORD=''
-    ```
-
-5. Acesse o sistema via navegador ou utilize ferramentas como [Postman](https://www.postman.com/)
 
 ## Contribuições e Feedback 🤝
 
