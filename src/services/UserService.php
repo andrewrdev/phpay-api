@@ -12,7 +12,7 @@ class UserService
     /**************************************************************************
      * Selects all users from the UserRepository.
      *
-     * @return datatype The selected users or a JSON response if no users found
+     * @return array The array of user objects.
      *************************************************************************/
 
     public static function selectAll()
