@@ -9,9 +9,12 @@ use src\repositories\UserRepository;
 
 class UserService
 {
+    /**************************************************************************
+     * Selects all users from the UserRepository.
+     *
+     * @return datatype The selected users or a JSON response if no users found
+     *************************************************************************/
 
-    // ********************************************************************************************
-    // ********************************************************************************************
     public static function selectAll()
     {
         $users = UserRepository::selectAll();
@@ -19,9 +22,13 @@ class UserService
         return (!empty($users)) ? $users : Response::json(['message' => 'Users not found'], 404);
     }
 
-    // ********************************************************************************************
-    // ********************************************************************************************
-
+    /**************************************************************************
+     * Retrieves a user by their ID.
+     *
+     * @param int $id The ID of the user to retrieve.
+     * @return mixed The user object if found, or a JSON response with 
+     * an error message and status code 404 if not found.
+     *************************************************************************/
     public static function selectById(int $id)
     {
         $user = UserRepository::selectById($id);
@@ -29,8 +36,12 @@ class UserService
         return (!empty($user)) ? $user : Response::json(['message' => 'User not found'], 404);
     }
 
-    // ********************************************************************************************
-    // ********************************************************************************************
+    /**************************************************************************
+     * Insert a user into the database.
+     *
+     * @param object $user The user object to be inserted. 
+     * @return void
+     *************************************************************************/
 
     public static function insert(object $user)
     {
@@ -44,8 +55,12 @@ class UserService
         }
     }
 
-    // ********************************************************************************************
-    // ********************************************************************************************
+    /**************************************************************************
+     * Updates a user.
+     *
+     * @param object $user The user object to be updated.     
+     * @return void
+     *************************************************************************/
 
     public static function update(object $user)
     {
@@ -58,8 +73,12 @@ class UserService
         }
     }
 
-    // ********************************************************************************************
-    // ********************************************************************************************
+    /**************************************************************************
+     * Deletes a user by their ID.
+     *
+     * @param int $id The ID of the user to be deleted.     
+     * @return void
+     *************************************************************************/
 
     public static function deleteById(int $id)
     {
@@ -72,8 +91,13 @@ class UserService
         }
     }
 
-    // ********************************************************************************************
-    // ********************************************************************************************
+    /**************************************************************************
+     * Deposits a given amount into a user's account.
+     *
+     * @param int $userId The ID of the user.
+     * @param float $amount The amount to deposit.     
+     * @return void
+     *************************************************************************/
 
     public static function deposit(int $userId, float $amount)
     {
@@ -86,8 +110,12 @@ class UserService
         }
     }
 
-    // ********************************************************************************************
-    // ********************************************************************************************
+    /**************************************************************************
+     * Retrieves the balance of a user.
+     *
+     * @param int $userId The ID of the user.     
+     * @return Some_Return_Value The balance of the user.
+     *************************************************************************/
 
     public static function getBalance(int $userId)
     {
@@ -96,8 +124,12 @@ class UserService
         return UserRepository::selectBalance($userId);
     }
 
-    // ********************************************************************************************
-    // ********************************************************************************************
+    /**************************************************************************
+     * Retrieves the type of a user based on their ID.
+     *
+     * @param int $userId The ID of the user.     
+     * @return mixed The type of the user.
+     *************************************************************************/
 
     public static function getType(int $userId)
     {
@@ -106,8 +138,15 @@ class UserService
         return UserRepository::selectById($userId);
     }
 
-    // ********************************************************************************************
-    // ********************************************************************************************
+    /**************************************************************************
+     * Checks if a user with the given ID exists and returns a JSON response 
+     * if not found.
+     *
+     * @param int $id The ID of the user to check.
+     * @param string $message The message to include in the JSON response if 
+     * the user is not found. Defaults to 'User not found'.
+     * @return void
+     *************************************************************************/
 
     public static function checkIfUserExists(int $id, string $message = 'User not found'): void
     {
@@ -118,8 +157,12 @@ class UserService
         }
     }
 
-    // ********************************************************************************************
-    // ********************************************************************************************
+    /**************************************************************************
+     * Checks if the given email already exists in the user repository.
+     *
+     * @param string $email The email to check.     
+     * @return void
+     *************************************************************************/
 
     private static function checkIfEmailExists(string $email): void
     {
@@ -130,8 +173,12 @@ class UserService
         }
     }
 
-    // ********************************************************************************************
-    // ********************************************************************************************
+    /**************************************************************************
+     * Check if a CPF or CNPJ already exists in the user repository.
+     *
+     * @param string $cpf_cnpj The CPF or CNPJ to check.     
+     * @return void
+     *************************************************************************/
 
     private static function checkIfCpfCnpjExists(string $cpf_cnpj): void
     {
@@ -141,7 +188,4 @@ class UserService
             Response::json(['message' => 'User cpf_cnpj already exists'], 409);
         }
     }
-
-    // ********************************************************************************************
-    // ********************************************************************************************    
 }
