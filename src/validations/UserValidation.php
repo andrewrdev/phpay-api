@@ -8,6 +8,13 @@ use src\app\http\Response;
 
 class UserValidation
 {
+    /**************************************************************************
+     * Validates the given user object.
+     *
+     * @param object $user The user object to be validated.
+     * @return void
+     *************************************************************************/
+
     public static function validate(object $user)
     {
         Validation::validateID($user->getId());
@@ -17,7 +24,14 @@ class UserValidation
         self::validatetype($user->getType());
     }
 
-    public static function validateFullName(string|null $fullName)
+    /**************************************************************************
+     * Validates a full name.
+     *
+     * @param string|null $fullName The full name to be validated.
+     * @return void
+     *************************************************************************/
+
+    public static function validateFullName(?string $fullName)
     {
         if ($fullName !== null) {
             if (!preg_match("/^[a-zA-Z ]+$/", $fullName)) {
@@ -30,7 +44,14 @@ class UserValidation
         }
     }
 
-    public static function validateEmail(string|null $email)
+    /**************************************************************************
+     * Validates an email address.
+     *
+     * @param string|null $email The email address to validate.
+     * @return void     
+     *************************************************************************/
+
+    public static function validateEmail(?string $email)
     {
         if ($email !== null) {
             if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
@@ -39,7 +60,15 @@ class UserValidation
         }
     }
 
-    public static function validateCpfCnpj(string|null $cpfCnpj)
+    /**************************************************************************
+     * Validates a given CPF (Cadastro de Pessoas Físicas) or 
+     * CNPJ (Cadastro Nacional da Pessoa Jurídica) number.
+     *
+     * @param string|null $cpfCnpj The CPF or CNPJ number to be validated.
+     * @return void
+     *************************************************************************/
+
+    public static function validateCpfCnpj(?string $cpfCnpj)
     {
         if ($cpfCnpj !== null) {
             $cpfRegex = "/^\d{3}\.\d{3}\.\d{3}-\d{2}$/";
@@ -51,7 +80,13 @@ class UserValidation
         }
     }
 
-    public static function validatetype(string|null $type)
+    /**************************************************************************
+     * Validates the type parameter.
+     *
+     * @param ?string $type The type parameter to be validated.
+     * @return void
+     *************************************************************************/
+    public static function validatetype(?string $type)
     {
         if ($type !== null) {
             if (!in_array($type, ['common', 'retailer'])) {
