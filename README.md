@@ -7,7 +7,7 @@
 
 ## Introdução
 
-Bem-vindo ao PHPlay API, uma solução em PHP para facilitar transferências de dinheiro entre usuários comuns e lojistas. Esta API oferece funcionalidades essenciais para um sistema financeiro simples e eficiente.
+Bem-vindo ao PHPay API, uma solução em PHP para facilitar transferências de dinheiro entre usuários comuns e lojistas. Esta API oferece funcionalidades essenciais para um sistema financeiro simples e eficiente.
 
 ## Funcionalidades Principais 🛠️
 
@@ -21,7 +21,7 @@ Bem-vindo ao PHPlay API, uma solução em PHP para facilitar transferências de 
 
 ## Como Utilizar 🚦
 
-Para utilizar o PHPlay API, basta seguir os seguintes passos:
+Para utilizar o PHPay API, basta seguir os seguintes passos:
 
 1. Clone este repositório:
    ```bash
